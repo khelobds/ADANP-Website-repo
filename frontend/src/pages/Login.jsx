@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 
 import logo from '../assets/adanp-logo.jpg';
 import './Login.css';
+import { backendErrorMessage, backendFetch } from '../config/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,7 +33,8 @@ const Login = () => {
     setSuccessMsg('');
 
     try {
-      const response = await fetch("http://localhost:8000/adanp-back/login.php", {
+      // Previous backend request: fetch("http://localhost:8000/adanp-back/login.php", {
+      const response = await backendFetch('login.php', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +66,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Login Error:", error);
-      setErrorMsg("Failed to connect to the backend server. Is it running?");
+      // Previous error message: setErrorMsg("Failed to connect to the backend server. Is it running?");
+      setErrorMsg(backendErrorMessage(error, "Failed to connect to the backend server. Is it running?"));
     }
   };
 
@@ -74,7 +77,8 @@ const Login = () => {
     setSuccessMsg('');
 
     try {
-      const response = await fetch("http://localhost:8000/adanp-back/register.php", {
+      // Previous backend request: fetch("http://localhost:8000/adanp-back/register.php", {
+      const response = await backendFetch('register.php', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +96,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Registration Error:", error);
-      setErrorMsg("Failed to connect to the backend server. Is it running?");
+      // Previous error message: setErrorMsg("Failed to connect to the backend server. Is it running?");
+      setErrorMsg(backendErrorMessage(error, "Failed to connect to the backend server. Is it running?"));
     }
   };
 

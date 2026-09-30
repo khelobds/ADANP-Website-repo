@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GalleryAdmin from './GalleryAdmin';
 import logo from '../assets/adanp-logo.jpg';
 import './AdminDashboard.css';
+import { backendErrorMessage, backendFetch, uploadedProofUrl } from '../config/api';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +21,8 @@ const AdminDashboard = () => {
   const fetchApplications = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/adanp-back/get_all_applications.php");
+      // Previous backend request: fetch("http://localhost:8000/adanp-back/get_all_applications.php");
+      const response = await backendFetch('get_all_applications.php');
       const data = await response.json();
       if (data.status === "success") {
         setApplications(data.data);
@@ -41,7 +43,8 @@ const AdminDashboard = () => {
     if (!window.confirm(`Are you sure you want to ${action} this application?`)) return;
 
     try {
-      const response = await fetch("http://localhost:8000/adanp-back/update_application.php", {
+      // Previous backend request: fetch("http://localhost:8000/adanp-back/update_application.php", {
+      const response = await backendFetch('update_application.php', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ application_id: appId, action: action })
@@ -55,7 +58,8 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error(`Error performing ${action}:`, error);
-      alert('An expected error occurred.');
+      // Previous error message: alert('An expected error occurred.');
+      alert(backendErrorMessage(error, 'An expected error occurred.'));
     }
   };
 
@@ -110,8 +114,9 @@ const AdminDashboard = () => {
                       <td>
                         <button 
                           className="view-btn" 
-                          onClick={() => setSelectedImage(`http://localhost:8000/${app.proof_of_payment_path}`)}
+                          onClick={() => setSelectedImage(uploadedProofUrl(app.proof_of_payment_path))}
                         >
+                          {/* Previous file URL: onClick={() => setSelectedImage(`http://localhost:8000/${app.proof_of_payment_path}`)} */}
                           View Image
                         </button>
                       </td>

@@ -3,8 +3,9 @@ import { FaCamera, FaPlay } from 'react-icons/fa';
 import Hero from '../components/Hero';
 import Section from '../components/Section';
 import './Gallery.css';
+import { backendFetch, uploadedFileUrl } from '../config/api';
 
-const API_URL = 'http://localhost:8000/adanp-back';
+// Previous API base URL: const API_URL = 'http://localhost:8000/adanp-back';
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -19,14 +20,16 @@ function Gallery() {
     setLoading(true);
     try {
       // Fetch images
-      const imageRes = await fetch(`${API_URL}/gallery.php?type=image`);
+      // Previous backend request: fetch(`${API_URL}/gallery.php?type=image`);
+      const imageRes = await backendFetch('gallery.php?type=image');
       const imageData = await imageRes.json();
       if (imageData.status === 'success') {
         setImages(imageData.data);
       }
 
       // Fetch videos
-      const videoRes = await fetch(`${API_URL}/gallery.php?type=video`);
+      // Previous backend request: fetch(`${API_URL}/gallery.php?type=video`);
+      const videoRes = await backendFetch('gallery.php?type=video');
       const videoData = await videoRes.json();
       if (videoData.status === 'success') {
         setVideos(videoData.data);
@@ -65,8 +68,9 @@ function Gallery() {
             {images.slice(0, 6).map((image) => (
               <div key={image.id} className="photo-item">
                 <div className="photo-image-wrapper">
+                  {/* Previous media URL: src={`${API_URL}/${image.file_path}`} */}
                   <img 
-                    src={`${API_URL}/${image.file_path}`} 
+                    src={uploadedFileUrl(image.file_path)}
                     alt={image.file_name}
                     className="photo-image"
                   />
@@ -99,8 +103,9 @@ function Gallery() {
             {videos.map((video) => (
               <div key={video.id} className="video-item">
                 <div className="video-wrapper">
+                  {/* Previous media URL: src={`${API_URL}/${video.file_path}`} */}
                   <video 
-                    src={`${API_URL}/${video.file_path}`}
+                    src={uploadedFileUrl(video.file_path)}
                     controls
                     className="video-player"
                   />

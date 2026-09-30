@@ -4,6 +4,7 @@ import logo from '../assets/adanp-logo.jpg';
 import VideoBg from '../assets/VideoBg.mp4';
 import Sidebar from '../components/Sidebar';
 import './NonMemberDashboard.css';
+import { backendErrorMessage, backendFetch } from '../config/api';
 
 const NonMemberDashboard = () => {
   const navigate = useNavigate();
@@ -36,7 +37,8 @@ const NonMemberDashboard = () => {
   const fetchApplicationStatus = async (userId) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/adanp-back/get_application_status.php?user_id=${userId}`);
+      // Previous backend request: fetch(`http://localhost:8000/adanp-back/get_application_status.php?user_id=${userId}`);
+      const response = await backendFetch(`get_application_status.php?user_id=${encodeURIComponent(userId)}`);
       const data = await response.json();
       if (data.status === "success" && data.application_status) {
         setAppStatus(data.application_status);
@@ -82,7 +84,8 @@ const NonMemberDashboard = () => {
     formData.append('proof_of_payment', proofOfPayment);
 
     try {
-      const response = await fetch("http://localhost:8000/adanp-back/submit_application.php", {
+      // Previous backend request: fetch("http://localhost:8000/adanp-back/submit_application.php", {
+      const response = await backendFetch('submit_application.php', {
         method: "POST",
         body: formData // DO NOT set Content-Type header. Browser sets multipart/form-data automatically.
       });
@@ -97,7 +100,8 @@ const NonMemberDashboard = () => {
       }
     } catch (error) {
       console.error("Submission Error:", error);
-      alert('An error occurred. Please try again.');
+      // Previous error message: alert('An error occurred. Please try again.');
+      alert(backendErrorMessage(error, 'An error occurred. Please try again.'));
     } finally {
       setIsSubmitting(false);
     }

@@ -304,3 +304,34 @@ section {
 .skip-link:focus {
   top: 0;
 }
+
+.backend-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: #fff3cd;
+  color: #533f03;
+  border-bottom: 1px solid #e8d69a;
+  text-align: center;
+}
+
+.backend-notice button {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+@media (max-width: 600px) {
+  .backend-notice {
+    align-items: flex-start;
+    justify-content: space-between;
+    text-align: left;
+  }
+}

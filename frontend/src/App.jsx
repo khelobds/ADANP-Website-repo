@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -26,6 +27,7 @@ import Legal from './pages/Legal';
 import Career from './pages/Career';
 import Forum from './pages/Forum';
 import Achievements from './pages/Achievements';
+import { clearBackendNotice, getBackendNotice, subscribeToBackendNotice } from './config/api';
 
 
 
@@ -38,6 +40,7 @@ import Achievements from './pages/Achievements';
 
 function AppContent() {
   const location = useLocation();
+  const backendNotice = useSyncExternalStore(subscribeToBackendNotice, getBackendNotice);
   const isLoginPage = location.pathname === '/login';
   const isGalleryAdminPage = location.pathname === '/gallery-admin' || location.pathname === '/Gallery-admin';
   const isDashboardPage = location.pathname.includes('dashboard') || location.pathname === '/profile' || location.pathname === '/cpd' || location.pathname === '/library' || location.pathname === '/videos' || location.pathname === '/logbook' || location.pathname === '/legal' || location.pathname === '/career' || location.pathname === '/forum' || location.pathname === '/achievements';
@@ -53,6 +56,12 @@ function AppContent() {
 
   return (
     <div className="app">
+      {backendNotice && (
+        <div className="backend-notice" role="alert">
+          <span>{backendNotice}</span>
+          <button type="button" onClick={clearBackendNotice} aria-label="Dismiss backend notice">Dismiss</button>
+        </div>
+      )}
       {!isLoginPage && !isGalleryAdminPage && !isDashboardPage && <a href="#main-content" className="skip-link">Skip to main content</a>}
       {!isGalleryAdminPage && !isDashboardPage && <Navbar />}
       <main id="main-content">

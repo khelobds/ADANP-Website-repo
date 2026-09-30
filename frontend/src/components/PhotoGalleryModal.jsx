@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './PhotoGalleryModal.css';
+import { backendErrorMessage, backendFetch, uploadedFileUrl } from '../config/api';
 
-const API_URL = 'http://localhost:8000/adanp-back';
+// Previous API base URL: const API_URL = 'http://localhost:8000/adanp-back';
 
 const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
   const [images, setImages] = useState([]);
@@ -19,7 +20,8 @@ const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
 
   const fetchImages = async () => {
     try {
-      const response = await fetch(`${API_URL}/gallery.php?type=image`);
+      // Previous backend request: fetch(`${API_URL}/gallery.php?type=image`);
+      const response = await backendFetch('gallery.php?type=image');
       const data = await response.json();
       if (data.status === 'success') {
         setImages(data.data);
@@ -70,7 +72,8 @@ const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
     });
 
     try {
-      const response = await fetch(`${API_URL}/upload.php`, {
+      // Previous backend request: fetch(`${API_URL}/upload.php`, {
+      const response = await backendFetch('upload.php', {
         method: 'POST',
         body: formData
       });
@@ -88,7 +91,8 @@ const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
         setMessage({ type: 'error', text: data.message || 'Upload failed' });
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to connect to server' });
+      // Previous error message: setMessage({ type: 'error', text: 'Failed to connect to server' });
+      setMessage({ type: 'error', text: backendErrorMessage(error, 'Failed to connect to server') });
     }
 
     setUploading(false);
@@ -98,7 +102,8 @@ const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
     if (!window.confirm('Are you sure you want to delete this image?')) return;
 
     try {
-      const response = await fetch(`${API_URL}/delete.php`, {
+      // Previous backend request: fetch(`${API_URL}/delete.php`, {
+      const response = await backendFetch('delete.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -113,7 +118,8 @@ const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
         setMessage({ type: 'error', text: data.message });
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to delete' });
+      // Previous error message: setMessage({ type: 'error', text: 'Failed to delete' });
+      setMessage({ type: 'error', text: backendErrorMessage(error, 'Failed to delete') });
     }
   };
 
@@ -192,8 +198,9 @@ const PhotoGalleryModal = ({ isOpen, onClose, onSave }) => {
             <div className="photo-gallery-grid">
               {images.map(image => (
                 <div key={image.id} className="photo-gallery-item">
+                  {/* Previous media URL: src={`${API_URL}/${image.file_path}`} */}
                   <img 
-                    src={`${API_URL}/${image.file_path}`} 
+                    src={uploadedFileUrl(image.file_path)}
                     alt={image.file_name} 
                   />
                   <button 

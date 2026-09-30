@@ -4,8 +4,9 @@ import './GalleryAdmin.css';
 import ConfirmationModal from '../components/ConfirmationModal';
 import VideoGalleryModal from '../components/VideoGalleryModal';
 import PhotoGalleryModal from '../components/PhotoGalleryModal';
+import { backendFetch } from '../config/api';
 
-const API_URL = 'http://localhost:8000/adanp-back';
+// Previous API base URL: const API_URL = 'http://localhost:8000/adanp-back';
 
 const GalleryAdmin = () => {
   const navigate = useNavigate();
@@ -25,8 +26,9 @@ const GalleryAdmin = () => {
   const fetchCounts = async () => {
     try {
       const [photoRes, videoRes] = await Promise.all([
-        fetch(`${API_URL}/gallery.php?type=image`),
-        fetch(`${API_URL}/gallery.php?type=video`)
+        // Previous backend requests: fetch(`${API_URL}/gallery.php?type=image`) and fetch(`${API_URL}/gallery.php?type=video`)
+        backendFetch('gallery.php?type=image'),
+        backendFetch('gallery.php?type=video')
       ]);
       
       const photoData = await photoRes.json();
