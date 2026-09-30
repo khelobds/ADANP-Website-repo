@@ -1,0 +1,349 @@
+.nm-dashboard-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: transparent;
+  /* Make it transparent to see the video */
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+}
+
+.nm-video-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.nm-background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.nm-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: none;
+}
+
+.nm-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nm-logo-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.nm-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.nm-logo-text strong {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: #1a1a1a;
+}
+
+.nm-logo-text span {
+  font-size: 0.8rem;
+  color: #c99339;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.nm-logout-btn {
+  background: transparent;
+  color: #1a1a1a;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nm-logout-btn:hover {
+  background: #fff;
+  color: #000030;
+}
+
+.nm-main-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.nm-status-card,
+.nm-form-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.welcome-title {
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 3rem;
+  margin-left: -50px;
+  justify-content: left;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.nm-status-card h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.nm-status-badge {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #a0aabf;
+}
+
+.status-badge-dynamic {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-left: 10px;
+  text-transform: capitalize;
+}
+
+.status-badge-dynamic.non-member {
+  background: rgba(201, 147, 57, 0.15);
+  color: #c99339;
+  border: 1px solid rgba(201, 147, 57, 0.3);
+}
+
+.status-badge-dynamic.pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-badge-dynamic.approved {
+  background: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.status-badge-dynamic.rejected {
+  background: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.nm-status-desc {
+  max-width: 500px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.6;
+  color: #b0b8cc;
+}
+
+.nm-apply-btn {
+  background-color: #c99339;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(201, 147, 57, 0.4);
+}
+
+.nm-apply-btn:hover {
+  transform: translateY(-2px);
+  background-color: #dcb059;
+  box-shadow: 0 6px 20px rgba(201, 147, 57, 0.6);
+}
+
+.nm-form-title {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+}
+
+.nm-application-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: left;
+}
+
+.nm-input-group {
+  width: 100%;
+}
+
+.row-group {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.nm-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.nm-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.nm-input:focus {
+  outline: none;
+  border-color: #c99339;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.half-input {
+  flex: 1;
+}
+
+.file-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.nm-file-label {
+  color: #c99339;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.nm-file-input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.nm-file-input::-webkit-file-upload-button {
+  background: #c99339;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  margin-right: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.nm-file-input::-webkit-file-upload-button:hover {
+  background: #dcb059;
+}
+
+.nm-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.nm-cancel-btn {
+  background: transparent;
+  color: #a0aabf;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nm-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.nm-submit-btn {
+  background: #c99339;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nm-submit-btn:hover {
+  background: #dcb059;
+}
+
+/* Loading State Styles */
+.nm-loading-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #fff;
+  gap: 20px;
+}
+
+.nm-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #c99339;
+  border-radius: 50%;
+  animation: nm-spin 1s linear infinite;
+}
+
+@keyframes nm-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

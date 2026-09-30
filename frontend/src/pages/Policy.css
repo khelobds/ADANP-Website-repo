@@ -1,0 +1,124 @@
+/* Policy Page Styles */
+.concerns-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.contact-link {
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 600;
+  margin-top: var(--spacing-sm);
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+.positions-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.read-more {
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: var(--spacing-md);
+}
+
+.read-more:hover {
+  color: var(--gold-dark);
+}
+
+.resolutions-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.resolution-item {
+  display: flex;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background-color: var(--off-white);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+  border-left: 4px solid var(--gold);
+}
+
+.resolution-year {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  background-color: var(--navy-blue);
+  color: var(--gold);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.resolution-text h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--navy-blue);
+  margin-bottom: var(--spacing-sm);
+}
+
+.resolution-text p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--medium-gray);
+  margin: 0;
+}
+
+.advocacy-cta {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.advocacy-cta h3 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-md);
+}
+
+.advocacy-cta p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .concerns-grid,
+  .positions-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .concerns-grid,
+  .positions-list {
+    grid-template-columns: 1fr;
+  }
+
+  .resolution-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .resolution-year {
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,93 @@
+/* Section Styles */
+.section {
+  padding: var(--spacing-3xl) 0;
+}
+
+.section-white {
+  background-color: var(--white);
+}
+
+.section-light {
+  background-color: var(--off-white);
+}
+
+.section-navy {
+  background-color: var(--navy-blue);
+  color: var(--white);
+}
+
+.section-navy h2,
+.section-navy h3,
+.section-navy h4,
+.section-navy h5,
+.section-navy h6 {
+  color: var(--gold);
+}
+
+.section-navy p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.section-gold {
+  background-color: var(--gold);
+  color: var(--navy-blue);
+}
+
+.section-gold h2,
+.section-gold h3,
+.section-gold h4 {
+  color: var(--navy-blue);
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-2xl);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--navy-blue);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  display: inline-block;
+}
+
+.section-navy .section-title {
+  color: var(--gold);
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--gold);
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--medium-gray);
+  line-height: 1.7;
+}
+
+.section-navy .section-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Responsive Section */
+@media (max-width: 768px) {
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+}

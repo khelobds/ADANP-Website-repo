@@ -1,0 +1,59 @@
+/* Board Page Styles */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.board-cta {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.board-cta h3 {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-md);
+}
+
+.board-cta p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--spacing-md);
+}
+
+.email-format {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-email {
+  margin-top: var(--spacing-lg);
+}
+
+.contact-email a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .board-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .board-grid {
+    grid-template-columns: 1fr;
+  }
+}

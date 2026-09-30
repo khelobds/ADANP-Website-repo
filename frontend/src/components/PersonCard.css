@@ -1,0 +1,62 @@
+/* Person Card Styles */
+.person-card {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.person-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+.person-card-image-wrapper {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background-color: var(--light-gray);
+}
+
+.person-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.person-card-image-placeholder {
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(135deg, var(--navy-blue) 0%, var(--navy-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.person-card-initials {
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.person-card-info {
+  padding: var(--spacing-lg);
+}
+
+.person-card-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy-blue);
+  margin-bottom: var(--spacing-xs);
+}
+
+.person-card-title {
+  font-size: 0.9rem;
+  color: var(--gold);
+  font-weight: 500;
+  margin: 0;
+}

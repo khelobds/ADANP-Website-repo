@@ -1,0 +1,126 @@
+/* Work With Us Page Styles */
+.partners-intro {
+  max-width: 800px;
+  margin: 0 auto var(--spacing-2xl);
+  text-align: center;
+}
+
+.partners-intro p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--medium-gray);
+}
+
+.partner-types {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.advertise-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.advertise-info {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.advertise-info h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--navy-blue);
+  margin-bottom: var(--spacing-lg);
+}
+
+.advertise-benefits {
+  list-style: none;
+  padding: 0;
+}
+
+.advertise-benefits li {
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--light-gray);
+  font-size: 0.95rem;
+  color: var(--medium-gray);
+}
+
+.advertise-benefits li:last-child {
+  border-bottom: none;
+}
+
+.advertise-benefits strong {
+  color: var(--navy-blue);
+}
+
+.advertise-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.recruitment-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-2xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.contact-partnership {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contact-partnership h3 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-partnership p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--spacing-xl);
+}
+
+.contact-emails {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-md);
+}
+
+.contact-emails p {
+  margin-bottom: var(--spacing-md);
+  font-size: 1rem;
+}
+
+.contact-emails p:last-child {
+  margin-bottom: 0;
+}
+
+.contact-emails a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.contact-emails strong {
+  color: var(--white);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .partner-types,
+  .advertise-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .recruitment-content {
+    grid-template-columns: 1fr;
+  }
+}

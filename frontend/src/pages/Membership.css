@@ -1,0 +1,350 @@
+/* Membership Page Styles */
+.membership-text-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.membership-text-content p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--medium-gray);
+}
+
+.membership-types-container {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: var(--spacing-2xl);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.membership-type-block {
+  background-color: var(--white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  border-top: 4px solid var(--gold);
+}
+
+.membership-type-block h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--navy-blue);
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 0.5rem;
+}
+
+.membership-info-list {
+  list-style: none;
+  padding: 0;
+}
+
+.membership-info-list li {
+  margin-bottom: var(--spacing-md);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--medium-gray);
+}
+
+.membership-info-list strong {
+  color: var(--navy-blue);
+  font-weight: 700;
+}
+
+.institutional-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--medium-gray);
+}
+
+.membership-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--navy-blue);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xl);
+}
+
+.benefits-list-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.benefits-custom-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md) var(--spacing-2xl);
+}
+
+.benefits-custom-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--medium-gray);
+}
+
+.step {
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: var(--gold);
+  color: var(--navy-blue);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.step h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.step p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.apply-cta,
+.member-cta {
+  display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--medium-gray);
+  }
+
+  .benefit-icon {
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .fees-table-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+  }
+
+  .custom-fees-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .custom-fees-table th {
+    background-color: var(--navy-blue);
+    color: var(--white);
+    text-align: center;
+    padding: 1rem;
+    font-family: var(--font-heading);
+  }
+
+  .custom-fees-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--light-gray);
+    color: var(--medium-gray);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .custom-fees-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .custom-fees-table tr:hover td {
+    background-color: rgba(212, 175, 55, 0.05);
+  }
+
+  .join-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .join-message {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .join-cta-group {
+    display: flex;
+    gap: var(--spacing-lg);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Membership Type Section */
+  .membership-type-section {
+    margin-bottom: var(--spacing-3xl);
+    padding: var(--spacing-xl);
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .membership-type-heading {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    color: var(--navy-blue);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+    padding-bottom: var(--spacing-md);
+    border-bottom: 3px solid var(--gold);
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* Membership Benefits Section */
+  .membership-benefits-section {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background-color: var(--light-gray);
+    border-radius: 8px;
+  }
+
+  .benefits-heading {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--navy-blue);
+    margin-bottom: var(--spacing-xs);
+    text-align: center;
+  }
+
+  .benefits-subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--medium-gray);
+    margin-bottom: var(--spacing-lg);
+    font-style: italic;
+  }
+
+  .institutional-membership {
+    max-width: 100%;
+    margin: 0 auto var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: var(--light-gray);
+    border-radius: 8px;
+    border-left: 4px solid var(--gold);
+  }
+
+  .institutional-membership p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--dark-gray);
+    text-align: center;
+  }
+
+  /* Membership Fee in Card */
+  .membership-fee {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: var(--light-gray);
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .membership-fee strong {
+    color: var(--navy-blue);
+  }
+
+  /* Benefits List */
+  .benefits-list {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .benefits-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+  }
+
+  .benefits-list li {
+    padding: var(--spacing-md);
+    font-size: 0.95rem;
+    color: var(--dark-gray);
+    background-color: white;
+    border-radius: 6px;
+    border-left: 3px solid var(--gold);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .benefits-list li:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Become Member Content */
+  .become-member-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .become-member-content .lead-text {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* Responsive */
+  @media (max-width: 992px) {
+    .membership-types-container {
+      grid-template-columns: 1fr;
+    }
+
+    .benefits-list ul {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .benefits-custom-list {
+      grid-template-columns: 1fr;
+    }
+
+    .apply-steps {
+      grid-template-columns: 1fr;
+    }
+
+    .apply-cta,
+    .member-cta {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .benefits-list ul {
+      grid-template-columns: 1fr;
+    }
+  }

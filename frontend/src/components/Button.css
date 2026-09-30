@@ -1,0 +1,107 @@
+/* Button Styles */
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Sizes */
+.btn-small {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+}
+
+.btn-medium {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 0.95rem;
+}
+
+.btn-large {
+  padding: var(--spacing-md) var(--spacing-2xl);
+  font-size: 1rem;
+}
+
+/* Variants */
+.btn-primary {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-blue);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--gold-dark);
+  border-color: var(--gold-dark);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background-color: var(--navy-blue);
+  border-color: var(--navy-blue);
+  color: var(--white);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--navy-light);
+  border-color: var(--navy-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline-navy {
+  background-color: transparent;
+  border-color: var(--navy-blue);
+  color: var(--navy-blue);
+}
+
+.btn-outline-navy:hover:not(:disabled) {
+  background-color: var(--navy-blue);
+  border-color: var(--navy-blue);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline-light {
+  background-color: transparent;
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.btn-outline-light:hover:not(:disabled) {
+  background-color: var(--white);
+  border-color: var(--white);
+  color: var(--navy-blue);
+}
+
+/* Full Width */
+.btn-full {
+  width: 100%;
+}

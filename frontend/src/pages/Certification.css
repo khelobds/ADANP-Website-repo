@@ -1,0 +1,111 @@
+/* Certification Page Styles */
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.program-requirements {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0;
+}
+
+.program-requirements li {
+  padding: var(--spacing-xs) 0;
+  font-size: 0.9rem;
+  color: var(--medium-gray);
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.program-requirements li:last-child {
+  border-bottom: none;
+}
+
+.program-requirements strong {
+  color: var(--navy-blue);
+}
+
+.program-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.application-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.application-steps {
+  padding-left: var(--spacing-lg);
+  margin: 0;
+}
+
+.application-steps li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--medium-gray);
+}
+
+.application-cta {
+  background-color: var(--navy-blue);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-md);
+  color: var(--white);
+}
+
+.application-cta h4 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-bottom: var(--spacing-md);
+}
+
+.application-cta p {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--spacing-lg);
+}
+
+.cta-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.exam-schedule-table,
+.passers-table {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.table-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--medium-gray);
+  margin-top: var(--spacing-md);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .programs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .application-info {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+}

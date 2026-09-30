@@ -1,0 +1,97 @@
+/* Card Styles */
+.card {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.card-hover {
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-hover:hover .card-title {
+  color: var(--gold);
+}
+
+.card-image-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: var(--light-gray);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.card-hover:hover .card-image {
+  transform: scale(1.1);
+}
+
+.card-header {
+  padding: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+}
+
+.card-subtitle {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--navy-blue);
+  margin: 0;
+  transition: color var(--transition-fast);
+}
+
+.card-content {
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+}
+
+.card-content p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--medium-gray);
+  margin-bottom: var(--spacing-md);
+}
+
+.card-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Card Variants */
+.card-navy {
+  background-color: var(--navy-blue);
+  color: var(--white);
+}
+
+.card-navy .card-title {
+  color: var(--gold);
+}
+
+.card-navy .card-content p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Card with border accent */
+.card-accent {
+  border-top: 4px solid var(--gold);
+}
