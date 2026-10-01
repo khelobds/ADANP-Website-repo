@@ -93,12 +93,11 @@ function AppContent() {
 }
 
 function App() {  
-  <>
-    <Analytics />
+  return (
     <Router basename={import.meta.env.BASE_URL}>
       <AppContent />
     </Router>
-  </> 
+  )
 }
 
 export default App;
