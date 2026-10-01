@@ -28,6 +28,7 @@ import Career from './pages/Career';
 import Forum from './pages/Forum';
 import Achievements from './pages/Achievements';
 import { clearBackendNotice, getBackendNotice, subscribeToBackendNotice } from './config/api';
+import { Analytics } from '@vercel/analytics/react';
 
 
 
@@ -43,15 +44,7 @@ function AppContent() {
   const backendNotice = useSyncExternalStore(subscribeToBackendNotice, getBackendNotice);
   const isLoginPage = location.pathname === '/login';
   const isGalleryAdminPage = location.pathname === '/gallery-admin' || location.pathname === '/Gallery-admin';
-  const isDashboardPage = location.pathname.includes('dashboard') || location.pathname === '/profile' || location.pathname === '/cpd' || location.pathname === '/library' || location.pathname === '/videos' || location.pathname === '/logbook' || location.pathname === '/legal' || location.pathname === '/career' || location.pathname === '/forum' || location.pathname === '/achievements';
-
-
-
-
-
-
-
-
+  const isDashboardPage = location.pathname.includes('dashboard') || location.pathname === '/profile' || location.pathname === '/cpd' || location.pathname === '/library' || location.pathname === '/videos' || location.pathname === '/logbook' || location.pathname === '/legal' || location.pathname === '/career' || location.pathname === '/forum' || location.pathname === '/achievements'; 
 
 
   return (
@@ -92,15 +85,6 @@ function AppContent() {
           <Route path="/career" element={<Career />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/achievements" element={<Achievements />} />
-
-
-
-
-
-
-
-
-
         </Routes>
       </main>
       {!isLoginPage && !isGalleryAdminPage && !isDashboardPage && <Footer />}
@@ -108,12 +92,13 @@ function AppContent() {
   );
 }
 
-function App() {
-  return (
+function App() {  
+  <>
+    <Analytics />
     <Router basename={import.meta.env.BASE_URL}>
       <AppContent />
     </Router>
-  );
+  </> 
 }
 
 export default App;
