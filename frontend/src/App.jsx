@@ -38,7 +38,6 @@ import { Analytics } from '@vercel/analytics/react';
 
 
 
-
 function AppContent() {
   const location = useLocation();
   const backendNotice = useSyncExternalStore(subscribeToBackendNotice, getBackendNotice);

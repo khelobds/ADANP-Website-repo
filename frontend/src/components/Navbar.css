@@ -32,10 +32,11 @@
   gap: var(--spacing-md);
   text-decoration: none;
   flex-shrink: 0;
+  height: 100%;
 }
 
 .navbar-logo-img {
-  height: 55px;
+  height: 85px;
   width: auto;
   transition: transform var(--transition-fast);
 }
@@ -195,7 +196,7 @@
 }
 
 .navbar-scrolled .navbar-logo-img {
-  height: 45px;
+  height: 85px;
 }
 
 /* Mobile Toggle */
@@ -309,9 +310,6 @@
     min-height: 60px;
   }
 
-  .navbar-logo-img {
-    height: 40px;
-  }
 
   .navbar-logo-text strong {
     font-size: 1.1rem;

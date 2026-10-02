@@ -3,8 +3,8 @@ export const BACKEND_UNAVAILABLE_MESSAGE = 'Backend services are temporarily una
 let unavailableMessage = '';
 const noticeListeners = new Set();
 
-const backendEnabled = import.meta.env.VITE_BACKEND_ENABLED === 'true';
-const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+const backendEnabled = import.meta.env.VITE_BACKEND_ENABLED === 'true'; 
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim(); 
 const localApiBaseUrl = import.meta.env.DEV ? 'http://localhost:8000/adanp-back' : '';
 const apiBaseUrl = (configuredApiBaseUrl || localApiBaseUrl).replace(/\/+$/, '');
 

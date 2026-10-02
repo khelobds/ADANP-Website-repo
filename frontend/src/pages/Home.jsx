@@ -4,7 +4,6 @@ import Hero from '../components/Hero';
 import Section from '../components/Section';
 import Card from '../components/Card';
 import InfoBox from '../components/InfoBox';
-import logo from '../assets/adanp-logo.jpg';
 import dermas from '../assets/dermats.png';
 import woman from '../assets/woman.png';
 import './Home.css';
@@ -14,7 +13,7 @@ function Home() {
     <div className="home">
       {/* Hero Section */}
       <Hero
-        title="Association of Dermatology & Aesthetic Nurses of the Philippines"
+        title="Association of Dermatology & Aesthetic Nurses of the Philippines, Inc."
         subtitle="ADANP"
         backgroundImage={dermas}
         primaryButton={{ to: '/membership', text: 'Join Now' }}
