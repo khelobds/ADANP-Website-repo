@@ -43,7 +43,7 @@ function Navbar() {
           <img src={logo} alt="ADANP Logo" className="navbar-logo-img" />
           <div className="navbar-logo-text">
             <strong>ADANP</strong>
-            <span className="navbar-logo-subtitle">Association of Dermatology & Aesthetic Nurses of the Philippines</span>
+            <span className="navbar-logo-subtitle">Association of Dermatology & Aesthetic Nurses of the Philippines, Inc.</span>
           </div>
         </Link>
 
