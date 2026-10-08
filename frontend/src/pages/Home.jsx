@@ -22,7 +22,7 @@ function Home() {
 
       {/* Introduction Section */}
       <Section variant="white">
-        <div className="secon-header">
+        <div className="section-header">
           <h2 className="section-title">Welcome to ADANP</h2>
         </div>
         <div className="home-intro">
