@@ -13,7 +13,7 @@ function Home() {
     <div className="home">
       {/* Hero Section */}
       <Hero
-        title="Association of Dermatology & Aesthetic Nurses of the Philippines."
+        title="Association of Dermatology & Aesthetic Nurses of the Philippines, Inc."
         subtitle="ADANP"
         backgroundImage={dermas}
         primaryButton={{ to: '/membership', text: 'Join Now' }}
