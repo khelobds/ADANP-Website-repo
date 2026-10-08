@@ -24,7 +24,6 @@ function Button({
     <button 
       type={type} 
       className={buttonClasses}
-      onClick={onClick}
       disabled={disabled}
     >
       {children}
