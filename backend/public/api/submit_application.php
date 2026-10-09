@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-include_once '../config/Database.php';
+require_once __DIR__ . '/../../config/Database.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -50,7 +50,7 @@ try {
 
     // Handle file upload
     if (isset($_FILES['proof_of_payment']) && $_FILES['proof_of_payment']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../uploads/';
+        $uploadDir = __DIR__ . '/../uploads/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }

@@ -1,5 +1,5 @@
 <?php
-include_once 'backend/config/Database.php';
+include_once __DIR__ . '/../config/Database.php';
 $database = new Database();
 $db = $database->getConnection();
 if ($db) {

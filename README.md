@@ -42,15 +42,17 @@ This platform provides a centralized hub for members, non-members, and administr
 adanp-web/
 ├── frontend/               # React application
 │   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page-level components
-│   │   └── assets/        # Images, fonts, and static files
-│   └── database_schema.sql # Database initialization script
-├── backend/                # PHP backend
-│   ├── adanp-back/        # Core API endpoints (PHP)
-│   ├── config/            # Database configuration
-│   └── uploads/           # User-uploaded files (proof of payment, etc.)
-└── config/                 # Root-level configuration (Database.php)
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Page-level components
+│   │   └── config/         # Frontend API configuration
+└── backend/                # PHP backend; public/ is the web document root
+    ├── bin/                # CLI utilities, including database migration
+    ├── config/             # Database connection
+    ├── database/           # Schema and database assets
+    ├── public/
+    │   ├── api/            # PHP API endpoints and public gallery uploads
+    │   └── uploads/        # Application proof uploads
+    └── tests/              # Local database diagnostics
 ```
 
 ##  Installation & Setup
@@ -62,12 +64,17 @@ adanp-web/
 
 ### 1. Database Setup
 1.  Create a database named `adanp_portal` in your MySQL server.
-2.  Import `frontend/database_schema.sql` into the database.
-3.  Configure `config/Database.php` with your local database credentials.
+2.  Import `backend/database/schema.sql` into the database, or run `php backend/bin/migrate.php`.
+3.  Configure the PHP process environment using the variable names listed in `backend/.env.example`. PHP does not load `.env` files automatically. Local defaults are `localhost`, `adanp_portal`, and the XAMPP/WAMP `root` user with an empty password; production credentials should be provided by the hosting environment.
 
 ### 2. Backend Configuration
-1.  Ensure your PHP server is running (e.g., Apache via XAMPP).
-2.  The backend expects to be served from a local server (defaulted to `http://localhost`).
+For local development, run the PHP server from the repository root with `backend/public` as its document root:
+
+```bash
+php -S localhost:8000 -t backend/public
+```
+
+The API is available under `http://localhost:8000/api`. Configure `VITE_BACKEND_ENABLED=true` in the frontend environment when enabling API calls. `VITE_API_BASE_URL` can override the default local API URL.
 
 ### 3. Frontend Setup
 ```bash

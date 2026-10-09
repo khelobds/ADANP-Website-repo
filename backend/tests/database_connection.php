@@ -21,7 +21,7 @@ if (empty($drivers)) {
     }
 }
 
-include_once './config/Database.php';
+include_once __DIR__ . '/../config/Database.php';
 
 $database = new Database();
 
