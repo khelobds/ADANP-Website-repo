@@ -1,5 +1,5 @@
 <?php
-include_once 'config/Database.php';
+include_once __DIR__ . '/../config/Database.php';
 
 try {
     $database = new Database();

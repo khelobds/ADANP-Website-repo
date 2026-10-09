@@ -41,14 +41,23 @@ Reusable UI units.
 - **`ConfirmationModal.jsx`**: Generic modal for confirming destructive actions.
 - **`Table.jsx`**: Standardized data display for logs and applications.
 
-### `backend/adanp-back`
-Backend logic served via PHP.
+### `backend/public/api`
+PHP entry points served as the API. Configure the web server document root as `backend/public` so database configuration, database scripts, and tests are not web-accessible.
 
 - **`login.php`**: Validates credentials and returns session data/status.
 - **`register.php`**: Handles account creation for new users.
 - **`upload.php`**: Generic file upload handler for gallery and documents.
 - **`submit_application.php`**: Processes membership applications and saves proof of payment.
 - **`get_application_status.php`**: Allows non-members to track their application progress.
+
+### Other backend directories
+
+- **`backend/config`**: Database connection configuration. Connection values are read from `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, and `DB_CHARSET`.
+- **`backend/database`**: Database schema and related assets.
+- **`backend/bin`**: Command-line maintenance utilities; `migrate.php` is CLI-only.
+- **`backend/public/api/uploads`**: Gallery uploads served under `/api/uploads`.
+- **`backend/public/uploads`**: Membership application proof uploads served under `/uploads`.
+- **`backend/tests`**: Local database diagnostic scripts.
 
 ---
 
@@ -85,6 +94,6 @@ The project uses modular vanilla CSS.
 3. Add a link to the page in the appropriate `Sidebar.jsx` or `Navbar.jsx`.
 
 ### Adding a New API Endpoint
-1. Create a `endpoint_name.php` in `backend/adanp-back`.
-2. Include `config/Database.php`.
+1. Create an `endpoint_name.php` in `backend/public/api`.
+2. Load the database configuration with `require_once __DIR__ . '/../../config/Database.php';`.
 3. Use PDO for queries and return JSON via `echo json_encode()`.
