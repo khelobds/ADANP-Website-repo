@@ -16,7 +16,7 @@
 }
 
 .navbar-container {
-  max-width: 1400px;
+  max-width: 100%;
   /* Increased to accommodate more links */
   margin: 0 auto;
   padding: 0.75rem var(--spacing-lg);
@@ -29,7 +29,7 @@
 .navbar-logo {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 0px;
   text-decoration: none;
   flex-shrink: 0;
   height: 100%;
@@ -48,7 +48,8 @@
 .navbar-logo-text {
   display: flex;
   flex-direction: column;
-  max-width: 250px;
+  width: 100%;
+  max-width: 13vw;
 }
 
 .navbar-logo-text strong {
@@ -72,7 +73,7 @@
 /* Navigation Menu */
 .navbar-menu {
   display: flex;
-  gap: 4px;
+  gap: 0px;
   /* Tight gap for many links */
   list-style: none;
   margin: 0;
