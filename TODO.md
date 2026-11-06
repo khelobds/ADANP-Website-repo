@@ -46,8 +46,9 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 ## 5. Cleanup
 
 - [ ] **Shrink large images:** `dermats.png` (8.3 MB), `work.png` (6 MB) and `board.png` (4.9 MB). Convert them to WebP or JPG and resize.
-- [ ] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` and `.htaccess` files).
-- [ ] **Remove `.vite/` and root `node_modules/` / `package-lock.json`** from the repo root and add them to `.gitignore`.
+- [x] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` and `.htaccess` files). Done 2026-11-06: untracked from git (still on disk) and ignored in `backend/.gitignore`.
+  - [ ] The files are still in git history. If any are real proof-of-payment documents, purge them from history (e.g. `git filter-repo`) before the repo is made public.
+- [x] **Remove `.vite/` and root `node_modules/` / `package-lock.json`** from the repo root and add them to `.gitignore`. Done 2026-11-06: untracked from git and ignored in the root `.gitignore`. The local files can be deleted safely.
 - [ ] **Remove the duplicate `/Gallery-admin` route** in `App.jsx`.
 - [ ] **Fix the README wording:** "dental and nursing literature" should match ADANP's dermatology focus, and fix the typo "confguration".
 - [ ] **Update `actions/checkout` and `actions/setup-node`** in CI from v3 to v4.

@@ -1,0 +1,4 @@
+# The app lives in frontend/ and backend/; npm run from the repo root creates these by mistake
+/node_modules/
+/package-lock.json
+/.vite/
