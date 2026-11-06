@@ -7,11 +7,14 @@ Unfinished features and tasks, grouped by priority. Last reviewed: 2026-11-06.
 - [x] **Stop uploads from running as code.** Done 2026-11-06 and tested on XAMPP. `upload.php` and `submit_application.php` now detect the real type with `finfo`, take the saved extension from an allowlist for that type, and use random file names. `.htaccess` in `api/uploads/` and `uploads/` serves only media/PDF files and never runs PHP.
   - [ ] If production runs on Nginx (or anything other than Apache), add the same "no scripts, media only" rule to the server config, since `.htaccess` is ignored there.
   - [ ] Try a photo, a video and a proof-of-payment upload through the website UI (only tested directly against the endpoints so far).
-- [ ] **Add server-side sessions.** `login.php` returns user data but no session or token, so later requests can't be tied to a logged-in user. Use PHP sessions or a signed token.
-- [ ] **Require an admin login on admin endpoints:** `delete.php`, `update_application.php`, `get_all_applications.php`, `upload.php`.
-- [ ] **Protect frontend routes.** Add route guards in `frontend/src/App.jsx` for `/admin-dashboard`, `/gallery-admin`, `/member-dashboard`, `/non-member-dashboard`, `/profile`, `/cpd`, `/library`, `/videos`, `/logbook` and `/forum`. Right now anyone can open them by typing the URL.
+- [x] **Add server-side sessions.** Done 2026-11-06 and tested against the endpoints. PHP sessions via `backend/config/Auth.php` (HttpOnly cookie, strict mode, new session ID on login, idle timeout). `submit_application.php` and `get_application_status.php` take the user from the session instead of the request. CSRF protection: non-GET requests must carry `X-Requested-With`.
+  - [ ] Test log in, log out, application submit/approve and gallery edits through the website UI in a browser (only tested with direct requests so far).
+- [x] **Require an admin login on admin endpoints:** `delete.php`, `update_application.php`, `get_all_applications.php`, `upload.php` now call `requireLogin(array('admin_user'))`.
+- [ ] **Protect frontend routes.** Add route guards in `frontend/src/App.jsx` for `/admin-dashboard`, `/gallery-admin`, `/member-dashboard`, `/non-member-dashboard`, `/profile`, `/cpd`, `/library`, `/videos`, `/logbook` and `/forum`. Right now anyone can open them by typing the URL (the backend now refuses their data, but the pages still render). Use `me.php` to check the session, and send the user to `/login` when an API call returns 401.
+- [ ] **Protect proof-of-payment files.** They are served publicly from `backend/public/uploads/` to anyone who has the (random) file name. Serve them through an admin-only endpoint instead.
 - [ ] **Remove the plain-text password check** in `login.php` (`$data->password === $password_hash`). Check passwords with `password_verify` only, and re-hash any accounts that were seeded in plain text.
-- [ ] **Limit CORS** to the real frontend origin instead of allowing every origin.
+- [x] **Limit CORS** to the real frontend origin instead of allowing every origin. Done with sessions: `backend/config/Cors.php` only allows origins in `CORS_ALLOWED_ORIGINS`.
+  - [ ] Set `CORS_ALLOWED_ORIGINS` to the production frontend URL when deploying (and `SESSION_SAMESITE=None` + HTTPS if the frontend and API are on different sites).
 - [ ] **Rate-limit login** to slow down brute-force attempts.
 
 ## 2. Member features (currently front-end only, with hard-coded data)
@@ -33,14 +36,14 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 - [ ] **Contact page map:** replace the placeholder with an embedded map.
 - [ ] **Content pages** (News, Achievements, Career, Work With Us): decide whether admins should manage them through the backend instead of hard-coded content.
 - [ ] **Password reset / forgot password.**
-- [ ] **Logout on the server side** (it only clears browser storage today).
+- [x] **Logout on the server side.** Done with sessions: `logout.php` destroys the session; dashboards call `logout()` from `api.js`.
 - [ ] **Notify applicants** when their membership application is approved or rejected.
 
 ## 4. Backend integration & deployment
 
 - [ ] **Enable the backend in production.** Set `VITE_BACKEND_ENABLED=true` and `VITE_API_BASE_URL`; the "integration is under development" message shows until then.
 - [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2.
-- [ ] **Choose hosting** for the frontend and the PHP/MySQL backend, set the environment variables, and set the document root to `backend/public`.
+- [ ] **Choose hosting** for the frontend and the PHP/MySQL backend, set the environment variables (`DB_*`, `CORS_ALLOWED_ORIGINS`, `SESSION_*`; see `backend/.env.example`), and set the document root to `backend/public`.
 - [ ] **Add backend tests** (only connection diagnostics exist) and a PHP lint/test step to CI.
 
 ## 5. Cleanup

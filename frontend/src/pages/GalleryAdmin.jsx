@@ -4,7 +4,7 @@ import './GalleryAdmin.css';
 import ConfirmationModal from '../components/ConfirmationModal';
 import VideoGalleryModal from '../components/VideoGalleryModal';
 import PhotoGalleryModal from '../components/PhotoGalleryModal';
-import { backendFetch } from '../config/api';
+import { backendFetch, logout } from '../config/api';
 
 // Previous API base URL: const API_URL = 'http://localhost:8000/adanp-back';
 
@@ -72,8 +72,8 @@ const GalleryAdmin = () => {
     setShowModal(false);
   };
 
-  const handleLogout = () => {
-    console.log('Logging out...');
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 

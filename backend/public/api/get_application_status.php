@@ -1,13 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+require_once __DIR__ . '/../../config/Cors.php';
+applyCors('GET, OPTIONS');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+require_once __DIR__ . '/../../config/Auth.php';
+$user = requireLogin(array('non_members'));
 
 require_once __DIR__ . '/../../config/Database.php';
 
@@ -20,7 +16,8 @@ if (!$db) {
     exit();
 }
 
-$non_member_id = isset($_GET['user_id']) ? $_GET['user_id'] : die(json_encode(array("status" => "error", "message" => "Missing user ID")));
+// Always the logged-in user, so nobody can look up someone else's application
+$non_member_id = $user['id'];
 
 try {
     $query = "SELECT status FROM non_member_applications WHERE non_member_id = :id ORDER BY submitted_at DESC LIMIT 1";
@@ -30,10 +27,27 @@ try {
 
     if ($stmt->rowCount() > 0) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo json_encode(array(
+        $response = array(
             "status" => "success",
             "application_status" => $row['status'] // Pending, Approved, Rejected
-        ));
+        );
+
+        // Once approved, the user has a row in members (created by update_application.php).
+        // Switch the session over to that account so member-only endpoints accept them.
+        if ($row['status'] === 'Approved') {
+            $memberStmt = $db->prepare("SELECT id, email FROM members WHERE email = :email LIMIT 1");
+            $memberStmt->bindParam(':email', $user['email']);
+            $memberStmt->execute();
+            $member = $memberStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($member) {
+                $memberUser = array("id" => $member['id'], "email" => $member['email'], "role" => "members");
+                loginUser($memberUser);
+                $response["user"] = $memberUser;
+            }
+        }
+
+        echo json_encode($response);
     } else {
         echo json_encode(array(
             "status" => "success",

@@ -4,7 +4,7 @@ import logo from '../assets/adanp-logo.jpg';
 import VideoBg from '../assets/VideoBg.mp4';
 import Sidebar from '../components/Sidebar';
 import './NonMemberDashboard.css';
-import { backendErrorMessage, backendFetch } from '../config/api';
+import { backendErrorMessage, backendFetch, logout } from '../config/api';
 
 const NonMemberDashboard = () => {
   const navigate = useNavigate();
@@ -27,35 +27,31 @@ const NonMemberDashboard = () => {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
-      fetchApplicationStatus(parsedUser.id);
+      fetchApplicationStatus();
     } else {
       // Not logged in properly, force them out
       navigate('/login');
     }
   }, [navigate]);
 
-  const fetchApplicationStatus = async (userId) => {
+  const fetchApplicationStatus = async () => {
     setLoading(true);
     try {
       // Previous backend request: fetch(`http://localhost:8000/adanp-back/get_application_status.php?user_id=${userId}`);
-      const response = await backendFetch(`get_application_status.php?user_id=${encodeURIComponent(userId)}`);
+      // The backend identifies the user from the session, so no user ID is sent.
+      const response = await backendFetch('get_application_status.php');
       const data = await response.json();
       if (data.status === "success" && data.application_status) {
         setAppStatus(data.application_status);
 
-        // If approved, automatically upgrade their session and redirect to Member Dashboard
-        if (data.application_status === 'Approved') {
-          const storedUser = localStorage.getItem('user');
-          if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            parsedUser.role = 'members';
-            localStorage.setItem('user', JSON.stringify(parsedUser));
+        // If approved, the backend has switched the session to the member account; cache it and redirect to Member Dashboard
+        if (data.application_status === 'Approved' && data.user) {
+          localStorage.setItem('user', JSON.stringify(data.user));
 
-            // Short delay so they can see the status badge change before redirect
-            setTimeout(() => {
-              navigate('/member-dashboard');
-            }, 2000);
-          }
+          // Short delay so they can see the status badge change before redirect
+          setTimeout(() => {
+            navigate('/member-dashboard');
+          }, 2000);
         }
       }
     } catch (error) {
@@ -65,8 +61,8 @@ const NonMemberDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
@@ -76,7 +72,6 @@ const NonMemberDashboard = () => {
     setIsSubmitting(true);
 
     const formData = new FormData();
-    formData.append('non_member_id', user.id);
     formData.append('full_name', fullName);
     formData.append('age', age);
     formData.append('license_number', licenseNumber);
