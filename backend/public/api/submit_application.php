@@ -1,14 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+require_once __DIR__ . '/../../config/Cors.php';
+applyCors('POST, OPTIONS');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
+require_once __DIR__ . '/../../config/Auth.php';
+$user = requireLogin(array('non_members'));
 
 require_once __DIR__ . '/../../config/Database.php';
 
@@ -21,14 +16,15 @@ if (!$db) {
     exit();
 }
 
-if (!isset($_POST['non_member_id']) || !isset($_POST['full_name']) || !isset($_POST['license_number'])) {
+if (!isset($_POST['full_name']) || !isset($_POST['license_number'])) {
     http_response_code(400);
     echo json_encode(array("status" => "error", "message" => "Incomplete data."));
     exit();
 }
 
 try {
-    $non_member_id = $_POST['non_member_id'];
+    // Always the logged-in user, so nobody can submit an application for someone else
+    $non_member_id = $user['id'];
     $full_name = $_POST['full_name'];
     $license_number = $_POST['license_number'];
     $age = $_POST['age'];

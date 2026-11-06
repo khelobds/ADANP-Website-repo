@@ -30,7 +30,7 @@ php backend/bin/migrate.php                # applies backend/database/schema.sql
 php backend/tests/connection_cli.php       # DB connectivity diagnostic (tests/ are diagnostics, not a test suite)
 ```
 
-DB credentials come from process env vars `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_CHARSET` (see `backend/.env.example`). PHP does **not** load `.env` files; defaults are `localhost` / `adanp_portal` / `root` / empty password (XAMPP/WAMP).
+DB credentials come from process env vars `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_CHARSET`; CORS and session settings from `CORS_ALLOWED_ORIGINS` and `SESSION_*` (see `backend/.env.example`). PHP does **not** load `.env` files; defaults are `localhost` / `adanp_portal` / `root` / empty password (XAMPP/WAMP).
 
 ## Architecture
 
@@ -50,12 +50,14 @@ Each page has a co-located `.css` file (vanilla CSS, no CSS framework); global s
 
 ### Auth model
 
-There are no sessions or tokens. `login.php` searches `admin_user`, `members`, then `non_members` for the email and returns `{ id, email, role }` where `role` is the **table name**. The frontend stores this in `localStorage['user']`, and each protected page reads it itself in a `useEffect` to gate access/redirect. Backend endpoints do not verify the caller.
+PHP sessions (cookie `ADANPSESSID`, HttpOnly) via `backend/config/Auth.php`. `login.php` searches `admin_user`, `members`, then `non_members` for the email, stores `{ id, email, role }` in the session with `loginUser()` and also returns it; `role` is the **table name**. Protected endpoints call `requireLogin()` or `requireLogin(array('admin_user'))`, which returns the session user or exits with 401/403, and must take the user ID from that return value, never from the request. `requireLogin()` also rejects non-GET requests without the `X-Requested-With: XMLHttpRequest` header (CSRF protection). `backendFetch()` sends that header and `credentials: 'include'` on every call. `logout.php` ends the session (frontend: `logout()` in `api.js`); `me.php` returns the session user. Session cookie settings come from `SESSION_SAMESITE`, `SESSION_SECURE`, `SESSION_IDLE_TIMEOUT` (see `backend/.env.example`).
 
-Membership flow: a user registers as a `non_members` row → submits a `non_member_applications` row (multipart form with proof upload) via `NonMemberDashboard` → an admin approves/rejects it in `AdminDashboard` via `update_application.php`.
+The frontend still caches the user in `localStorage['user']`, and each protected page reads it in a `useEffect` to gate access/redirect. That cache is display-only; the backend decides access.
+
+Membership flow: a user registers as a `non_members` row → submits a `non_member_applications` row (multipart form with proof upload) via `NonMemberDashboard` → an admin approves/rejects it in `AdminDashboard` via `update_application.php`, which copies an approved user into `members`. The next `get_application_status.php` call switches that user's session to the `members` account and returns it as `user`.
 
 ### Backend endpoints
 
-`backend/public` is the web document root so `config/`, `database/`, `bin/`, `tests/` stay non-public. Each file in `backend/public/api/` is a standalone endpoint following the same template: CORS headers + OPTIONS short-circuit, `require_once __DIR__ . '/../../config/Database.php'`, `(new Database())->getConnection()` (returns `null` on failure, so check it), then PDO prepared statements and a JSON response with `status`/`message`. Copy this structure when adding endpoints.
+`backend/public` is the web document root so `config/`, `database/`, `bin/`, `tests/` stay non-public. Each file in `backend/public/api/` is a standalone endpoint following the same template: `require_once __DIR__ . '/../../config/Cors.php'` + `applyCors('POST, OPTIONS')` (sets headers for origins in `CORS_ALLOWED_ORIGINS` and short-circuits OPTIONS), then for protected endpoints `require_once __DIR__ . '/../../config/Auth.php'` + `requireLogin(...)`, then `require_once __DIR__ . '/../../config/Database.php'`, `(new Database())->getConnection()` (returns `null` on failure, so check it), then PDO prepared statements and a JSON response with `status`/`message`. Copy this structure when adding endpoints.
 
 Schema lives in `backend/database/schema.sql` (`CREATE TABLE IF NOT EXISTS`); `migrate.php` naively splits it on `;`, so avoid semicolons inside statements there.
