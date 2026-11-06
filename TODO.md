@@ -4,10 +4,9 @@ Unfinished features and tasks, grouped by priority. Last reviewed: 2026-11-06.
 
 ## 1. Security (fix before going live)
 
-- [ ] **Stop uploads from running as code.** `backend/public/api/upload.php` trusts the browser-supplied MIME type (`$files['type']`) and keeps the original file extension, so a `.php` file sent as `image/png` is saved into the web-served `api/uploads/` folder and can then be executed.
-  - Check the real type on the server with `finfo`, and choose the extension from an allowlist based on that type.
-  - Turn off PHP execution in `api/uploads/` and `uploads/` (with `.htaccess` or the web server config).
-  - Apply the same server-side check to the proof-of-payment upload in `submit_application.php`, which currently checks only the extension.
+- [x] **Stop uploads from running as code.** Done 2026-11-06 and tested on XAMPP. `upload.php` and `submit_application.php` now detect the real type with `finfo`, take the saved extension from an allowlist for that type, and use random file names. `.htaccess` in `api/uploads/` and `uploads/` serves only media/PDF files and never runs PHP.
+  - [ ] If production runs on Nginx (or anything other than Apache), add the same "no scripts, media only" rule to the server config, since `.htaccess` is ignored there.
+  - [ ] Try a photo, a video and a proof-of-payment upload through the website UI (only tested directly against the endpoints so far).
 - [ ] **Add server-side sessions.** `login.php` returns user data but no session or token, so later requests can't be tied to a logged-in user. Use PHP sessions or a signed token.
 - [ ] **Require an admin login on admin endpoints:** `delete.php`, `update_application.php`, `get_all_applications.php`, `upload.php`.
 - [ ] **Protect frontend routes.** Add route guards in `frontend/src/App.jsx` for `/admin-dashboard`, `/gallery-admin`, `/member-dashboard`, `/non-member-dashboard`, `/profile`, `/cpd`, `/library`, `/videos`, `/logbook` and `/forum`. Right now anyone can open them by typing the URL.
@@ -47,7 +46,7 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 ## 5. Cleanup
 
 - [ ] **Shrink large images:** `dermats.png` (8.3 MB), `work.png` (6 MB) and `board.png` (4.9 MB). Convert them to WebP or JPG and resize.
-- [ ] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` files).
+- [ ] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` and `.htaccess` files).
 - [ ] **Remove `.vite/` and root `node_modules/` / `package-lock.json`** from the repo root and add them to `.gitignore`.
 - [ ] **Remove the duplicate `/Gallery-admin` route** in `App.jsx`.
 - [ ] **Fix the README wording:** "dental and nursing literature" should match ADANP's dermatology focus, and fix the typo "confguration".
