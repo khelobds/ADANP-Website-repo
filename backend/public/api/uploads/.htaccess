@@ -1,0 +1,17 @@
+# Uploaded files are data, never code: only serve known media types
+# and never hand anything in this folder to PHP.
+<FilesMatch ".*">
+    Require all denied
+</FilesMatch>
+<FilesMatch "\.(?i:jpe?g|png|gif|mp4|webm|pdf)$">
+    Require all granted
+</FilesMatch>
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+
+Options -Indexes -ExecCGI

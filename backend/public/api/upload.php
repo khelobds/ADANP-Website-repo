@@ -21,10 +21,12 @@ if (!$db) {
     exit();
 }
 
-// Allowed file types
-$allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-$allowedVideoTypes = ['video/mp4', 'video/webm'];
-$allowedTypes = array_merge($allowedImageTypes, $allowedVideoTypes);
+// Allowed file types, detected from the file contents (never the browser-supplied type),
+// mapped to the extension the file is saved with
+$allowedImageTypes = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
+$allowedVideoTypes = ['video/mp4' => 'mp4', 'video/webm' => 'webm'];
+$allowedTypes = $allowedImageTypes + $allowedVideoTypes;
+$finfo = new finfo(FILEINFO_MIME_TYPE);
 
 // Max file size (50MB)
 $maxFileSize = 50 * 1024 * 1024;
@@ -34,7 +36,7 @@ $uploadDir = __DIR__ . '/uploads/';
 
 // Create uploads directory if it doesn't exist
 if (!file_exists($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
+    mkdir($uploadDir, 0755, true);
 }
 
 // Check if files were uploaded
@@ -54,7 +56,6 @@ for ($i = 0; $i < $fileCount; $i++) {
     $fileName = $files['name'][$i];
     $fileTmpName = $files['tmp_name'][$i];
     $fileSize = $files['size'][$i];
-    $fileType = $files['type'][$i];
     $fileError = $files['error'][$i];
     
     // Check for upload errors
@@ -69,18 +70,19 @@ for ($i = 0; $i < $fileCount; $i++) {
         continue;
     }
     
-    // Check file type
-    if (!in_array($fileType, $allowedTypes)) {
+    // Check file type from its actual contents
+    $fileType = $finfo->file($fileTmpName);
+    if (!isset($allowedTypes[$fileType])) {
         $errors[] = "$fileName has an unsupported file type";
         continue;
     }
-    
+
     // Determine file type (image or video)
-    $fileCategory = in_array($fileType, $allowedImageTypes) ? 'image' : 'video';
-    
-    // Generate unique filename
-    $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-    $newFileName = uniqid() . '_' . time() . '.' . $extension;
+    $fileCategory = isset($allowedImageTypes[$fileType]) ? 'image' : 'video';
+
+    // Generate unique filename; the extension comes from the detected type, not the uploaded name
+    $extension = $allowedTypes[$fileType];
+    $newFileName = bin2hex(random_bytes(16)) . '.' . $extension;
     $filePath = $uploadDir . $newFileName;
     
     // Move uploaded file
