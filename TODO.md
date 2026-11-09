@@ -47,7 +47,7 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 ## 5. Cleanup
 
 - [ ] **Shrink large images:** `dermats.png` (8.3 MB), `work.png` (6 MB) and `board.png` (4.9 MB). Convert them to WebP or JPG and resize.
-- [ ] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` files).
+- [ ] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` and `.htaccess` files).
 - [ ] **Remove `.vite/` and root `node_modules/` / `package-lock.json`** from the repo root and add them to `.gitignore`.
 - [ ] **Remove the duplicate `/Gallery-admin` route** in `App.jsx`.
 - [x] **Fix the README wording:** "dental and nursing literature" should match ADANP's dermatology focus, and fix the typo "confguration".

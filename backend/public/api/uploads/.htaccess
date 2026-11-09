@@ -1,7 +1,11 @@
-# Uploaded files are served as static content only. Never run scripts from this folder.
-Options -ExecCGI -Indexes
-RemoveHandler .php .phtml .phar .php3 .php4 .php5 .php7 .php8 .pht .cgi .pl .py
-RemoveType .php .phtml .phar .php3 .php4 .php5 .php7 .php8 .pht
+# Uploaded files are data, never code: only serve known media types
+# and never hand anything in this folder to PHP.
+<FilesMatch ".*">
+    Require all denied
+</FilesMatch>
+<FilesMatch "\.(?i:jpe?g|png|gif|mp4|webm|pdf)$">
+    Require all granted
+</FilesMatch>
 
 <IfModule mod_php.c>
     php_flag engine off
@@ -10,10 +14,4 @@ RemoveType .php .phtml .phar .php3 .php4 .php5 .php7 .php8 .pht
     php_flag engine off
 </IfModule>
 
-<FilesMatch "(?i)\.(php\d?|phtml|phar|pht|phps|cgi|pl|py|sh)$">
-    Require all denied
-</FilesMatch>
-
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-</IfModule>
+Options -Indexes -ExecCGI

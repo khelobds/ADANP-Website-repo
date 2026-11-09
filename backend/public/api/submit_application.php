@@ -58,7 +58,7 @@ try {
         $fileTmpPath = $_FILES['proof_of_payment']['tmp_name'];
 
         // Detect the type from the file contents and pick the extension from it,
-        // so the original file name can never decide how the file is served
+        // ignoring the uploaded name and the browser-supplied type
         $allowedTypes = array(
             'image/jpeg' => 'jpg',
             'image/png' => 'png',

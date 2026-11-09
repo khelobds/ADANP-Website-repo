@@ -1,4 +1,4 @@
-.videos-layout {
+/* .videos-layout {
   display: flex;
   height: 100vh;
   width: 100%;
@@ -6,7 +6,7 @@
   font-family: 'Inter', sans-serif;
   color: #1a1a1a;
   overflow: hidden;
-}
+} */
 
 .videos-main-area {
   flex: 1;

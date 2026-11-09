@@ -104,6 +104,10 @@
   flex-wrap: wrap;
 }
 
+.btn-adjust {
+  padding: 5px 10px;
+}
+
 /* Responsive */
 @media (max-width: 992px) {
   .values-grid {

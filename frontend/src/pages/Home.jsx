@@ -101,7 +101,7 @@ function Home() {
           </InfoBox>
         </div>
         <div className="text-center" style={{ marginTop: 'var(--spacing-xl)' }}>
-          <Link to="/about" className="btn btn-primary">
+          <Link to="/about" className="btn btn-primary btn-adjust">
             Learn More About Us
           </Link>
         </div>
@@ -174,7 +174,7 @@ function Home() {
           </Card>
         </div>
         <div className="text-center" style={{ marginTop: 'var(--spacing-xl)' }}>
-          <Link to="/news" className="btn btn-outline-navy">
+          <Link to="/news" className="btn btn-outline-navy btn-adjust">
             View All News & Events
           </Link>
         </div>

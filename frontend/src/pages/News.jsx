@@ -130,7 +130,7 @@ function News() {
               Interested in hosting an ADANP event in your region?
               Contact us to learn more about bringing our programs to your area.
             </p>
-            <a href="/contact" className="btn btn-primary">Contact Us</a>
+            <a href="/contact" className="btn btn-primary btn-adjust">Contact Us</a>
           </div>
         </div>
       </Section>
@@ -168,8 +168,8 @@ function News() {
           </div>
         </div>
         <div className="text-center" style={{ marginTop: 'var(--spacing-xl)' }}>
-          <a href="#" className="btn btn-primary">Register Now</a>
-          <a href="#" className="btn btn-outline-light" style={{ marginLeft: 'var(--spacing-md)' }}>Learn More</a>
+          <a href="#" className="btn btn-primary btn-adjust">Register Now</a>
+          <a href="#" className="btn btn-outline-light bt btn-adjust" style={{ marginLeft: 'var(--spacing-md)' }}>Learn More</a>
         </div>
       </Section>
 
@@ -191,7 +191,7 @@ function News() {
           ))}
         </div>
         <div className="text-center" style={{ marginTop: 'var(--spacing-xl)' }}>
-          <a href="#" className="btn btn-outline-navy">View Past Recipients</a>
+          <a href="#" className="btn btn-outline-navy btn-adjust">View Past Recipients</a>
         </div>
       </Section>
     </div>
