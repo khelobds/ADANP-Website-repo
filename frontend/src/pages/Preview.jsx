@@ -15,6 +15,13 @@ const demoUsers = {
   non_members: { id: 0, email: 'applicant@preview.local', role: 'non_members', full_name: 'Preview Applicant' },
 };
 
+// Called on every render of the app so protected pages opened directly by URL (or after logout) still load.
+export const ensurePreviewUser = () => {
+  if (previewEnabled && !localStorage.getItem('user')) {
+    localStorage.setItem('user', JSON.stringify(demoUsers.members));
+  }
+};
+
 const sections = [
   {
     title: 'Public',
@@ -62,8 +69,9 @@ const Preview = () => {
     <div className="preview-page">
       <h1>Page Preview</h1>
       <p className="preview-note">
-        Backend-free navigation for checking the UI. Links in a role section store a demo user in
-        localStorage before opening the page. Data and actions that need the API will be empty or fail.
+        Backend-free navigation for checking the UI. A demo member is signed in automatically, so every
+        page opens without logging in; links in a role section switch the demo user to that role first.
+        Data and actions that need the API will be empty or fail.
       </p>
 
       {sections.map((section) => (
@@ -101,9 +109,6 @@ const Preview = () => {
         </table>
       </section>
 
-      <button type="button" className="preview-clear" onClick={() => localStorage.removeItem('user')}>
-        Clear demo user
-      </button>
     </div>
   );
 };

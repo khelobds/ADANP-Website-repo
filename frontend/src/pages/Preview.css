@@ -66,13 +66,3 @@
   border-bottom: 1px solid var(--light-gray);
   word-break: break-all;
 }
-
-.preview-clear {
-  margin-top: var(--spacing-xl);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--navy-blue);
-  color: var(--white);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}

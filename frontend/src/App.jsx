@@ -27,7 +27,7 @@ import Legal from './pages/Legal';
 import Career from './pages/Career';
 import Forum from './pages/Forum';
 import Achievements from './pages/Achievements';
-import Preview, { previewEnabled } from './pages/Preview';
+import Preview, { ensurePreviewUser, previewEnabled } from './pages/Preview';
 import { clearBackendNotice, getBackendNotice, subscribeToBackendNotice } from './config/api';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -41,6 +41,7 @@ import { Analytics } from '@vercel/analytics/react';
 
 function AppContent() {
   const location = useLocation();
+  ensurePreviewUser();
   const backendNotice = useSyncExternalStore(subscribeToBackendNotice, getBackendNotice);
   const isLoginPage = location.pathname === '/login';
   const isGalleryAdminPage = location.pathname === '/gallery-admin' || location.pathname === '/Gallery-admin';
