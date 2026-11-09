@@ -56,13 +56,20 @@ try {
         }
 
         $fileTmpPath = $_FILES['proof_of_payment']['tmp_name'];
-        $fileName = $_FILES['proof_of_payment']['name'];
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif', 'pdf');
+        // Detect the type from the file contents and pick the extension from it,
+        // so the original file name can never decide how the file is served
+        $allowedTypes = array(
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'application/pdf' => 'pdf'
+        );
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $fileType = $finfo->file($fileTmpPath);
 
-        if (in_array($fileExtension, $allowedExtensions)) {
-            $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+        if (isset($allowedTypes[$fileType])) {
+            $newFileName = bin2hex(random_bytes(16)) . '.' . $allowedTypes[$fileType];
             $destPath = $uploadDir . $newFileName;
 
             if (move_uploaded_file($fileTmpPath, $destPath)) {

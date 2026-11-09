@@ -4,7 +4,7 @@ Unfinished features and tasks, grouped by priority. Last reviewed: 2026-11-06.
 
 ## 1. Security (fix before going live)
 
-- [ ] **Stop uploads from running as code.** `backend/public/api/upload.php` trusts the browser-supplied MIME type (`$files['type']`) and keeps the original file extension, so a `.php` file sent as `image/png` is saved into the web-served `api/uploads/` folder and can then be executed.
+- [x] **Stop uploads from running as code.** `backend/public/api/upload.php` trusts the browser-supplied MIME type (`$files['type']`) and keeps the original file extension, so a `.php` file sent as `image/png` is saved into the web-served `api/uploads/` folder and can then be executed.
   - Check the real type on the server with `finfo`, and choose the extension from an allowlist based on that type.
   - Turn off PHP execution in `api/uploads/` and `uploads/` (with `.htaccess` or the web server config).
   - Apply the same server-side check to the proof-of-payment upload in `submit_application.php`, which currently checks only the extension.
@@ -50,5 +50,5 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 - [ ] **Remove committed test uploads** from `backend/public/uploads/` and `backend/public/api/uploads/`, and add both folders to `.gitignore` (keep the `.gitkeep` files).
 - [ ] **Remove `.vite/` and root `node_modules/` / `package-lock.json`** from the repo root and add them to `.gitignore`.
 - [ ] **Remove the duplicate `/Gallery-admin` route** in `App.jsx`.
-- [ ] **Fix the README wording:** "dental and nursing literature" should match ADANP's dermatology focus, and fix the typo "confguration".
+- [x] **Fix the README wording:** "dental and nursing literature" should match ADANP's dermatology focus, and fix the typo "confguration".
 - [ ] **Update `actions/checkout` and `actions/setup-node`** in CI from v3 to v4.
