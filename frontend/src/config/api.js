@@ -43,7 +43,23 @@ export const backendFetch = (path, options) => {
     return Promise.reject(Object.assign(new Error(message), { code: 'BACKEND_NOT_CONFIGURED' }));
   }
 
-  return fetch(`${apiBaseUrl}/${path.replace(/^\/+/, '')}`, options);
+  // credentials: send the PHP session cookie so the backend knows who is logged in.
+  // X-Requested-With: the backend rejects data-changing requests without it (CSRF protection).
+  return fetch(`${apiBaseUrl}/${path.replace(/^\/+/, '')}`, {
+    ...options,
+    credentials: 'include',
+    headers: { 'X-Requested-With': 'XMLHttpRequest', ...options?.headers },
+  });
+};
+
+// Ends the server session, then clears the cached user. The cache is cleared even if the request fails.
+export const logout = async () => {
+  try {
+    await backendFetch('logout.php', { method: 'POST' });
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
+  localStorage.removeItem('user');
 };
 
 export const uploadedFileUrl = (path) => {

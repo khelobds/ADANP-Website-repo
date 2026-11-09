@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GalleryAdmin from './GalleryAdmin';
 import logo from '../assets/adanp-logo.jpg';
 import './AdminDashboard.css';
-import { backendErrorMessage, backendFetch, uploadedProofUrl } from '../config/api';
+import { backendErrorMessage, backendFetch, logout, uploadedProofUrl } from '../config/api';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -34,8 +34,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 

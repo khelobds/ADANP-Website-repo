@@ -1,2 +1,10 @@
 .env
 /vendor/
+
+# User uploads (gallery media, proof-of-payment files); keep only the folder markers and their .htaccess
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/.htaccess
+/public/api/uploads/*
+!/public/api/uploads/.gitkeep
+!/public/api/uploads/.htaccess
