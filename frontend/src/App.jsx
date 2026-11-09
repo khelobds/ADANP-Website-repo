@@ -27,6 +27,7 @@ import Legal from './pages/Legal';
 import Career from './pages/Career';
 import Forum from './pages/Forum';
 import Achievements from './pages/Achievements';
+import Preview, { previewEnabled } from './pages/Preview';
 import { clearBackendNotice, getBackendNotice, subscribeToBackendNotice } from './config/api';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -84,6 +85,7 @@ function AppContent() {
           <Route path="/career" element={<Career />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/achievements" element={<Achievements />} />
+          {previewEnabled && <Route path="/preview" element={<Preview />} />}
         </Routes>
       </main>
       {!isLoginPage && !isGalleryAdminPage && !isDashboardPage && <Footer />}
