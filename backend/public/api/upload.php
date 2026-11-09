@@ -39,6 +39,8 @@ if (!file_exists($uploadDir)) {
     mkdir($uploadDir, 0755, true);
 }
 
+$finfo = new finfo(FILEINFO_MIME_TYPE);
+
 // Check if files were uploaded
 if (empty($_FILES['files'])) {
     http_response_code(400);
