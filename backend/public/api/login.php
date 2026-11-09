@@ -1,15 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+require_once __DIR__ . '/../../config/Cors.php';
+applyCors('POST, OPTIONS');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
-
+require_once __DIR__ . '/../../config/Auth.php';
 require_once __DIR__ . '/../../config/Database.php';
 
 $database = new Database();
@@ -23,7 +16,7 @@ if (!$db) {
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->email) && !empty($data->password)) {
+if (!empty($data->email) && !empty($data->password)) {
     $tables = ['admin_user', 'members', 'non_members'];
     $user_found = false;
     $password_hash = '';
@@ -31,7 +24,7 @@ if(!empty($data->email) && !empty($data->password)) {
 
     foreach ($tables as $table) {
         $query = "SELECT id, email, password FROM $table WHERE email = :email LIMIT 1";
-        
+
         try {
             $stmt = $db->prepare($query);
             if (!$stmt) continue; // If prepare fails silently due to missing table
@@ -40,7 +33,7 @@ if(!empty($data->email) && !empty($data->password)) {
             $stmt->execute();
             $num = $stmt->rowCount();
 
-            if($num > 0) {
+            if ($num > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $password_hash = $row['password'];
                 $user_found = true;
@@ -51,14 +44,17 @@ if(!empty($data->email) && !empty($data->password)) {
                 );
                 break; // Stop searching once user is found
             }
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             // Catch ANY error/exception (missing table syntax error, etc.) and continue to next table 
             continue;
         }
     }
 
-    if($user_found) {
-        if($data->password === $password_hash || password_verify($data->password, $password_hash)) {
+    if ($user_found) {
+        if ($data->password === $password_hash || password_verify($data->password, $password_hash)) {
+            // Remember the user on the server; later requests are identified by the session cookie
+            loginUser($user_data);
+
             http_response_code(200);
             echo json_encode(array(
                 "status" => "success",
@@ -77,4 +73,3 @@ if(!empty($data->email) && !empty($data->password)) {
     http_response_code(400);
     echo json_encode(array("status" => "error", "message" => "Unable to login. Data missing."));
 }
-?>

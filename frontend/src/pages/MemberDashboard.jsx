@@ -4,6 +4,7 @@ import logo from '../assets/adanp-logo.jpg';
 import VideoBg from '../assets/VideoBg.mp4';
 import './NonMemberDashboard.css'; // Reusing base styles for consistency
 import Sidebar from '../components/Sidebar';
+import { logout } from '../config/api';
 
 
 const MemberDashboard = () => {
@@ -19,8 +20,8 @@ const MemberDashboard = () => {
     }
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
