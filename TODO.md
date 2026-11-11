@@ -5,19 +5,22 @@ Unfinished features and tasks, grouped by priority. Last reviewed: 2026-11-06.
 ## 1. Security (fix before going live)
 
 - [x] **Stop uploads from running as code.** Done 2026-11-06 and tested on XAMPP. `upload.php` and `submit_application.php` now detect the real type with `finfo`, take the saved extension from an allowlist for that type, and use random file names. `.htaccess` in `api/uploads/` and `uploads/` serves only media/PDF files and never runs PHP.
-  - [ ] If production runs on Nginx (or anything other than Apache), add the same "no scripts, media only" rule to the server config, since `.htaccess` is ignored there.
+  - [x] If production runs on Nginx (or anything other than Apache), add the same "no scripts, media only" rule to the server config, since `.htaccess` is ignored there. Done 2026-11-11: `backend/deploy/nginx.conf.example` has the rules; copy it into the real server config when deploying on Nginx.
   - [ ] Try a photo, a video and a proof-of-payment upload through the website UI (only tested directly against the endpoints so far).
 - [x] **Add server-side sessions.** Done 2026-11-06 and tested against the endpoints. PHP sessions via `backend/config/Auth.php` (HttpOnly cookie, strict mode, new session ID on login, idle timeout). `submit_application.php` and `get_application_status.php` take the user from the session instead of the request. CSRF protection: non-GET requests must carry `X-Requested-With`.
   - [ ] Test log in, log out, application submit/approve and gallery edits through the website UI in a browser (only tested with direct requests so far).
 - [x] **Require an admin login on admin endpoints:** `delete.php`, `update_application.php`, `get_all_applications.php`, `upload.php` now call `requireLogin(array('admin_user'))`.
 - [x] **Protect frontend routes.** Done 2026-11-11: `RequireAuth` (`frontend/src/components/RequireAuth.jsx`) wraps `/admin-dashboard`, `/gallery-admin`, `/member-dashboard`, `/non-member-dashboard`, `/profile`, `/cpd`, `/library`, `/videos`, `/logbook` and `/forum` in `App.jsx`. It checks the session with `me.php`: no session goes to `/login`, wrong role goes to that role's own dashboard. Any API call that returns 401 also sends the user to `/login`. `/legal`, `/career` and `/achievements` are public. While the backend is off, protected pages open without a login (for previewing) and show a demo user.
   - [ ] Test log in, wrong-role access and session expiry through the website UI with the backend running.
-- [ ] **Protect proof-of-payment files.** They are served publicly from `backend/public/uploads/` to anyone who has the (random) file name. Serve them through an admin-only endpoint instead.
+- [x] **Protect proof-of-payment files.** They are served publicly from `backend/public/uploads/` to anyone who has the (random) file name. Serve them through an admin-only endpoint instead. Done 2026-11-11: new proofs are saved in `backend/storage/proofs/` (outside the web root) and admins view them through `api/proof.php?id=<application id>`. `backend/public/uploads/` now serves nothing. `php backend/bin/move_proofs.php --apply` moves older proofs out of the public folder.
+  - [ ] Run `php backend/bin/move_proofs.php --apply` on every database and server (each developer's copy and production).
 - [x] **Remove the plain-text password check** in `login.php` (`$data->password === $password_hash`). Done 2026-11-11: `login.php` uses `password_verify` only. The old check also let anyone log in by sending an account's stored hash as the password. `php backend/bin/rehash_passwords.php` lists plain-text accounts and `--apply` hashes them (the password itself stays the same).
   - [ ] Run `php backend/bin/rehash_passwords.php --apply` on every database (each developer's local copy and production), or plain-text accounts there can no longer log in.
 - [x] **Limit CORS** to the real frontend origin instead of allowing every origin. Done with sessions: `backend/config/Cors.php` only allows origins in `CORS_ALLOWED_ORIGINS`.
   - [ ] Set `CORS_ALLOWED_ORIGINS` to the production frontend URL when deploying (and `SESSION_SAMESITE=None` + HTTPS if the frontend and API are on different sites).
-- [ ] **Rate-limit login** to slow down brute-force attempts.
+- [x] **Rate-limit login** to slow down brute-force attempts. Done 2026-11-11: failed logins are stored in `login_attempts`; after 5 failures for one email, or 20 across all emails, from the same IP within 15 minutes, `login.php` answers 429 with `Retry-After`. Limits are set with `LOGIN_*` (see `backend/.env.example`).
+  - [ ] Run `php backend/bin/migrate.php` on every database to create the `login_attempts` table (until then logins work but are not limited).
+  - [ ] If production sits behind a proxy or load balancer, pass the real client IP to PHP (see the end of `backend/deploy/nginx.conf.example`), or all visitors share one limit.
 
 ## 2. Member features (currently front-end only, with hard-coded data)
 

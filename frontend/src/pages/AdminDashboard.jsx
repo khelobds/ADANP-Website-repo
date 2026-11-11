@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import GalleryAdmin from './GalleryAdmin';
 import logo from '../assets/adanp-logo.jpg';
 import './AdminDashboard.css';
-import { backendErrorMessage, backendFetch, logout, uploadedProofUrl } from '../config/api';
+import { backendErrorMessage, backendFetch, logout } from '../config/api';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [applications, setApplications] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  // { url, type } of the proof being viewed; url is a blob: URL of the file loaded from proof.php
+  const [selectedProof, setSelectedProof] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,27 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Proofs are private, so they are loaded with the session cookie instead of linked directly
+  const viewProof = async (appId) => {
+    try {
+      const response = await backendFetch(`proof.php?id=${appId}`);
+      if (!response.ok) {
+        alert('Could not load the proof of payment.');
+        return;
+      }
+      const blob = await response.blob();
+      setSelectedProof({ url: URL.createObjectURL(blob), type: blob.type });
+    } catch (error) {
+      console.error('Error loading proof of payment:', error);
+      alert(backendErrorMessage(error, 'Could not load the proof of payment.'));
+    }
+  };
+
+  const closeProof = () => {
+    URL.revokeObjectURL(selectedProof.url);
+    setSelectedProof(null);
   };
 
   const handleLogout = async () => {
@@ -114,10 +136,9 @@ const AdminDashboard = () => {
                       <td>
                         <button 
                           className="view-btn" 
-                          onClick={() => setSelectedImage(uploadedProofUrl(app.proof_of_payment_path))}
+                          onClick={() => viewProof(app.id)}
                         >
-                          {/* Previous file URL: onClick={() => setSelectedImage(`http://localhost:8000/${app.proof_of_payment_path}`)} */}
-                          View Image
+                          View Proof
                         </button>
                       </td>
                       <td>
@@ -216,11 +237,13 @@ const AdminDashboard = () => {
       </main>
 
       {/* Image Modal for Proof of Payment */}
-      {selectedImage && (
-        <div className="image-modal-overlay" onClick={() => setSelectedImage(null)}>
+      {selectedProof && (
+        <div className="image-modal-overlay" onClick={closeProof}>
           <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal-btn" onClick={() => setSelectedImage(null)}>×</button>
-            <img src={selectedImage} alt="Proof of Payment" />
+            <button className="close-modal-btn" onClick={closeProof}>×</button>
+            {selectedProof.type === 'application/pdf'
+              ? <iframe src={selectedProof.url} title="Proof of Payment" className="proof-pdf" />
+              : <img src={selectedProof.url} alt="Proof of Payment" />}
           </div>
         </div>
       )}

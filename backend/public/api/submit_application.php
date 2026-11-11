@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../config/Auth.php';
 $user = requireLogin(array('non_members'));
 
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../config/Proofs.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -46,7 +47,8 @@ try {
 
     // Handle file upload
     if (isset($_FILES['proof_of_payment']) && $_FILES['proof_of_payment']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../uploads/';
+        // Outside the web root: admins view proofs through api/proof.php only
+        $uploadDir = proofStorageDir();
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
@@ -55,12 +57,7 @@ try {
 
         // Detect the type from the file contents and pick the extension from it,
         // ignoring the uploaded name and the browser-supplied type
-        $allowedTypes = array(
-            'image/jpeg' => 'jpg',
-            'image/png' => 'png',
-            'image/gif' => 'gif',
-            'application/pdf' => 'pdf'
-        );
+        $allowedTypes = PROOF_TYPES;
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $fileType = $finfo->file($fileTmpPath);
 
@@ -69,7 +66,7 @@ try {
             $destPath = $uploadDir . $newFileName;
 
             if (move_uploaded_file($fileTmpPath, $destPath)) {
-                $proof_of_payment_path = 'uploads/' . $newFileName;
+                $proof_of_payment_path = 'proofs/' . $newFileName;
             } else {
                 http_response_code(500);
                 echo json_encode(array("status" => "error", "message" => "Error moving the uploaded file."));

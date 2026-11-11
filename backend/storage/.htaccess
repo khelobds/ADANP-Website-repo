@@ -1,0 +1,2 @@
+# Private files (proof-of-payment uploads). Never served directly; see api/proof.php.
+Require all denied

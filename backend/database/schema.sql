@@ -61,3 +61,13 @@ CREATE TABLE IF NOT EXISTS members (
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Failed login attempts, used by config/RateLimit.php to slow down password guessing
+CREATE TABLE IF NOT EXISTS login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(150) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_login_attempts_email_ip (email, ip_address, attempted_at),
+    INDEX idx_login_attempts_ip (ip_address, attempted_at)
+);

@@ -28,6 +28,7 @@ Backend (run from repo root):
 php -S localhost:8000 -t backend/public    # API served at http://localhost:8000/api
 php backend/bin/migrate.php                # applies backend/database/schema.sql (CLI-only)
 php backend/bin/rehash_passwords.php       # lists plain-text passwords; add --apply to hash them (login only accepts hashes)
+php backend/bin/move_proofs.php            # lists proofs still in the public uploads folder; add --apply to move them to storage/proofs
 php backend/tests/connection_cli.php       # DB connectivity diagnostic (tests/ are diagnostics, not a test suite)
 ```
 
@@ -39,9 +40,9 @@ DB credentials come from process env vars `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_P
 
 All API calls must go through `backendFetch()` in `frontend/src/config/api.js`, never raw `fetch`. The backend is **disabled by default**: unless `VITE_BACKEND_ENABLED=true`, `backendFetch` rejects with `code: 'BACKEND_UNAVAILABLE'` and publishes a notice that `App.jsx` renders as a dismissible banner (via `useSyncExternalStore` on `subscribeToBackendNotice`/`getBackendNotice`). Use `backendErrorMessage(error, fallback)` to surface these errors. The API base URL is `VITE_API_BASE_URL`, falling back to `http://localhost:8000/api` only in dev; in production builds with no URL configured, calls fail with `BACKEND_NOT_CONFIGURED`.
 
-Two upload locations, two URL helpers:
-- Gallery media → `backend/public/api/uploads/`, resolved with `uploadedFileUrl(path)` (relative to the API base).
-- Membership proof-of-payment → `backend/public/uploads/`, resolved with `uploadedProofUrl(path)` (relative to the API origin).
+Two upload locations:
+- Gallery media (public) → `backend/public/api/uploads/`, resolved with `uploadedFileUrl(path)` (relative to the API base).
+- Membership proof-of-payment (private) → `backend/storage/proofs/`, outside the web root. Stored as `proofs/<name>`; admins load it with `backendFetch('proof.php?id=<application id>')` as a blob. Never link to it directly. `backend/public/uploads/` is the old public location and serves nothing (`bin/move_proofs.php` empties it).
 
 ### Routing and layout
 
@@ -61,6 +62,6 @@ Membership flow: a user registers as a `non_members` row → submits a `non_memb
 
 ### Backend endpoints
 
-`backend/public` is the web document root so `config/`, `database/`, `bin/`, `tests/` stay non-public. Each file in `backend/public/api/` is a standalone endpoint following the same template: `require_once __DIR__ . '/../../config/Cors.php'` + `applyCors('POST, OPTIONS')` (sets headers for origins in `CORS_ALLOWED_ORIGINS` and short-circuits OPTIONS), then for protected endpoints `require_once __DIR__ . '/../../config/Auth.php'` + `requireLogin(...)`, then `require_once __DIR__ . '/../../config/Database.php'`, `(new Database())->getConnection()` (returns `null` on failure, so check it), then PDO prepared statements and a JSON response with `status`/`message`. Copy this structure when adding endpoints.
+`backend/public` is the web document root so `config/`, `database/`, `bin/`, `storage/`, `tests/` stay non-public. `login.php` is rate-limited per email+IP and per IP via `config/RateLimit.php` (`login_attempts` table, `LOGIN_*` env vars); `backend/deploy/nginx.conf.example` mirrors the `.htaccess` upload rules for Nginx. Each file in `backend/public/api/` is a standalone endpoint following the same template: `require_once __DIR__ . '/../../config/Cors.php'` + `applyCors('POST, OPTIONS')` (sets headers for origins in `CORS_ALLOWED_ORIGINS` and short-circuits OPTIONS), then for protected endpoints `require_once __DIR__ . '/../../config/Auth.php'` + `requireLogin(...)`, then `require_once __DIR__ . '/../../config/Database.php'`, `(new Database())->getConnection()` (returns `null` on failure, so check it), then PDO prepared statements and a JSON response with `status`/`message`. Copy this structure when adding endpoints.
 
 Schema lives in `backend/database/schema.sql` (`CREATE TABLE IF NOT EXISTS`); `migrate.php` naively splits it on `;`, so avoid semicolons inside statements there.
