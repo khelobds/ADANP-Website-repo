@@ -3,8 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import logo from '../assets/adanp-logo.jpg';
 import { FaIdCard, FaUserNurse, FaLock, FaDownload, FaPrint, FaSave, FaShieldAlt } from 'react-icons/fa';
+import { backendErrorMessage, backendFetch } from '../config/api';
 import './Profile.css';
-sad
+
+// The PRC license is saved on the server (license.php; its expiry date sets the CPD cycle).
+// The other profile fields are still only kept in browser storage.
+const saveLicense = async ({ prc_no, prc_expiry }) => {
+    const response = await backendFetch('license.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ license_number: prc_no, expiry_date: prc_expiry }),
+    });
+    const data = await response.json();
+    if (!response.ok || data.status !== 'success') throw new Error(data.message || 'Could not save your PRC license.');
+};
+
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -34,9 +47,20 @@ const Profile = () => {
                 current_workplace: parsedUser.current_workplace || '',
                 professional_bio: parsedUser.professional_bio || ''
             }));
-        } else {
-            navigate('/login');
         }
+
+        backendFetch('license.php')
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === 'success') {
+                    setProfileData(prev => ({
+                        ...prev,
+                        prc_no: data.license.license_number || '',
+                        prc_expiry: data.license.expiry_date || ''
+                    }));
+                }
+            })
+            .catch((error) => console.error('Error loading PRC license:', error));
     }, [navigate]);
 
     const handleInputChange = (e) => {
@@ -47,16 +71,18 @@ const Profile = () => {
         }));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setIsSaving(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsSaving(false);
+        const updatedUser = { ...user, ...profileData };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        try {
+            await saveLicense(profileData);
             alert('Profile updated successfully!');
-            // Update local storage if needed
-            const updatedUser = { ...user, ...profileData };
-            localStorage.setItem('user', JSON.stringify(updatedUser));
-        }, 1000);
+        } catch (error) {
+            alert(`Your other changes were kept, but the PRC license was not saved: ${backendErrorMessage(error, error.message)}`);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     if (!user) return null;
