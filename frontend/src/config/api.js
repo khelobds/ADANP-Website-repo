@@ -9,6 +9,28 @@ const localApiBaseUrl = import.meta.env.DEV ? 'http://localhost:8000/api' : '';
 const apiBaseUrl = (configuredApiBaseUrl || localApiBaseUrl).replace(/\/+$/, '');
 export const API_BASE_URL = apiBaseUrl;
 
+export const isBackendEnabled = () => backendEnabled;
+
+// Notified when an API call returns 401 (session missing or expired); App.jsx sends the user to /login.
+const unauthorizedListeners = new Set();
+
+export const subscribeToUnauthorized = (listener) => {
+  unauthorizedListeners.add(listener);
+  return () => unauthorizedListeners.delete(listener);
+};
+
+// login.php answers 401 for a wrong password, and me.php's 401 is handled by RequireAuth, so neither counts.
+const SESSION_CHECK_EXEMPT = new Set(['login.php', 'me.php']);
+
+const handleUnauthorized = (path, response) => {
+  const endpoint = path.replace(/^\/+/, '').split('?')[0];
+  if (response.status === 401 && !SESSION_CHECK_EXEMPT.has(endpoint)) {
+    localStorage.removeItem('user');
+    unauthorizedListeners.forEach((listener) => listener());
+  }
+  return response;
+};
+
 const notifyUnavailable = (message = BACKEND_UNAVAILABLE_MESSAGE) => {
   unavailableMessage = message;
   noticeListeners.forEach((listener) => listener());
@@ -50,7 +72,7 @@ export const backendFetch = (path, options) => {
     ...options,
     credentials: 'include',
     headers: { 'X-Requested-With': 'XMLHttpRequest', ...options?.headers },
-  });
+  }).then((response) => handleUnauthorized(path, response));
 };
 
 // Ends the server session, then clears the cached user. The cache is cleared even if the request fails.

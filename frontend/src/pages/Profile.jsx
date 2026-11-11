@@ -34,8 +34,6 @@ const Profile = () => {
                 current_workplace: parsedUser.current_workplace || '',
                 professional_bio: parsedUser.professional_bio || ''
             }));
-        } else {
-            navigate('/login');
         }
     }, [navigate]);
 

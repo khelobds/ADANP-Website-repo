@@ -28,9 +28,6 @@ const NonMemberDashboard = () => {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
       fetchApplicationStatus();
-    } else {
-      // Not logged in properly, force them out
-      navigate('/login');
     }
   }, [navigate]);
 

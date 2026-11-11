@@ -1,7 +1,8 @@
-import { useSyncExternalStore } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect, useSyncExternalStore } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import RequireAuth from './components/RequireAuth';
 import Home from './pages/Home';
 import About from './pages/About';
 import Board from './pages/Board';
@@ -27,8 +28,8 @@ import Legal from './pages/Legal';
 import Career from './pages/Career';
 import Forum from './pages/Forum';
 import Achievements from './pages/Achievements';
-import Preview, { ensurePreviewUser, previewEnabled } from './pages/Preview';
-import { clearBackendNotice, getBackendNotice, subscribeToBackendNotice } from './config/api';
+import Preview, { previewEnabled } from './pages/Preview';
+import { clearBackendNotice, getBackendNotice, subscribeToBackendNotice, subscribeToUnauthorized } from './config/api';
 import { Analytics } from '@vercel/analytics/react';
 
 
@@ -39,9 +40,16 @@ import { Analytics } from '@vercel/analytics/react';
 
 
 
+// Roles allowed on each protected route (backend table names, as returned by login.php/me.php).
+const ADMIN = ['admin_user'];
+const MEMBER = ['members'];
+const NON_MEMBER = ['non_members'];
+
 function AppContent() {
   const location = useLocation();
-  ensurePreviewUser();
+  const navigate = useNavigate();
+  // Any API call that comes back 401 means the session is gone: send the user to log in again.
+  useEffect(() => subscribeToUnauthorized(() => navigate('/login', { replace: true })), [navigate]);
   const backendNotice = useSyncExternalStore(subscribeToBackendNotice, getBackendNotice);
   const isLoginPage = location.pathname === '/login';
   const isGalleryAdminPage = location.pathname === '/gallery-admin' || location.pathname === '/Gallery-admin';
@@ -69,22 +77,22 @@ function AppContent() {
           <Route path="/policy" element={<Policy />} />
           <Route path="/news" element={<News />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="/gallery-admin" element={<GalleryAdmin />} />
-          <Route path="/Gallery-admin" element={<GalleryAdmin />} />
+          <Route path="/gallery-admin" element={<RequireAuth roles={ADMIN}><GalleryAdmin /></RequireAuth>} />
+          <Route path="/Gallery-admin" element={<RequireAuth roles={ADMIN}><GalleryAdmin /></RequireAuth>} />
           <Route path="/work-with-us" element={<WorkWithUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/non-member-dashboard" element={<NonMemberDashboard />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/member-dashboard" element={<MemberDashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/cpd" element={<CPD />} />
-          <Route path="/library" element={<Library />} />
-          <Route path="/videos" element={<Videos />} />
-          <Route path="/logbook" element={<Logbook />} />
+          <Route path="/non-member-dashboard" element={<RequireAuth roles={NON_MEMBER}><NonMemberDashboard /></RequireAuth>} />
+          <Route path="/admin-dashboard" element={<RequireAuth roles={ADMIN}><AdminDashboard /></RequireAuth>} />
+          <Route path="/member-dashboard" element={<RequireAuth roles={MEMBER}><MemberDashboard /></RequireAuth>} />
+          <Route path="/profile" element={<RequireAuth roles={MEMBER}><Profile /></RequireAuth>} />
+          <Route path="/cpd" element={<RequireAuth roles={MEMBER}><CPD /></RequireAuth>} />
+          <Route path="/library" element={<RequireAuth roles={MEMBER}><Library /></RequireAuth>} />
+          <Route path="/videos" element={<RequireAuth roles={MEMBER}><Videos /></RequireAuth>} />
+          <Route path="/logbook" element={<RequireAuth roles={MEMBER}><Logbook /></RequireAuth>} />
           <Route path="/legal" element={<Legal />} />
           <Route path="/career" element={<Career />} />
-          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum" element={<RequireAuth roles={MEMBER}><Forum /></RequireAuth>} />
           <Route path="/achievements" element={<Achievements />} />
           {previewEnabled && <Route path="/preview" element={<Preview />} />}
         </Routes>

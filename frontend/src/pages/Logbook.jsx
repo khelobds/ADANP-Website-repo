@@ -34,8 +34,6 @@ const Logbook = () => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
-        } else {
-            navigate('/login');
         }
     }, [navigate]);
 
