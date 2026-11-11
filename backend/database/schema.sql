@@ -71,3 +71,46 @@ CREATE TABLE IF NOT EXISTS login_attempts (
     INDEX idx_login_attempts_email_ip (email, ip_address, attempted_at),
     INDEX idx_login_attempts_ip (ip_address, attempted_at)
 );
+
+-- PRC license of each member. The expiry date ends the member's 3-year CPD cycle (see config/Cpd.php)
+CREATE TABLE IF NOT EXISTS member_licenses (
+    member_id INT PRIMARY KEY,
+    license_number VARCHAR(100),
+    expiry_date DATE,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);
+
+-- ADANP-run seminars. Creating one credits the selected attendees with approved CPD records
+CREATE TABLE IF NOT EXISTS cpd_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    event_date DATE NOT NULL,
+    units DECIMAL(5,2) NOT NULL,
+    created_by INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES admin_user(id) ON DELETE SET NULL
+);
+
+-- CPD units per member: certificates members submit (reviewed by an admin) and ADANP seminar credits
+CREATE TABLE IF NOT EXISTS cpd_records (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    event_id INT NULL,
+    title VARCHAR(255) NOT NULL,
+    provider VARCHAR(255) NOT NULL,
+    activity_date DATE NOT NULL,
+    units DECIMAL(5,2) NOT NULL,
+    certificate_path VARCHAR(500) NULL,
+    source ENUM('external', 'adanp') NOT NULL DEFAULT 'external',
+    status ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Pending',
+    review_note TEXT NULL,
+    reviewed_by INT NULL,
+    reviewed_at TIMESTAMP NULL,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES cpd_events(id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewed_by) REFERENCES admin_user(id) ON DELETE SET NULL,
+    UNIQUE KEY uniq_cpd_event_member (event_id, member_id),
+    INDEX idx_cpd_member_status (member_id, status, activity_date)
+);

@@ -10,3 +10,5 @@
 !/public/api/uploads/.htaccess
 /storage/proofs/*
 !/storage/proofs/.gitkeep
+/storage/cpd/*
+!/storage/cpd/.gitkeep

@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar';
 import logo from '../assets/adanp-logo.jpg';
 import { FaIdCard, FaUserNurse, FaLock, FaDownload, FaPrint, FaSave, FaShieldAlt } from 'react-icons/fa';
 import './Profile.css';
-
+sad
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -34,6 +34,8 @@ const Profile = () => {
                 current_workplace: parsedUser.current_workplace || '',
                 professional_bio: parsedUser.professional_bio || ''
             }));
+        } else {
+            navigate('/login');
         }
     }, [navigate]);
 
