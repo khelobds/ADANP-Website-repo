@@ -47,12 +47,8 @@ const Career = () => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
-        } else {
-            navigate('/login');
         }
     }, [navigate]);
-
-    if (!user) return null;
 
     return (
         <div className="career-layout">
@@ -61,7 +57,7 @@ const Career = () => {
                 <header className="career-topbar">
                     <h2 className="topbar-title">Career Hub</h2>
                     <div className="topbar-user">
-                        <span>Welcome, <strong>{user.full_name}</strong></span>
+                        <span>Welcome, <strong>{user?.full_name ?? 'Guest'}</strong></span>
                     </div>
                 </header>
 

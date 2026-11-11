@@ -38,12 +38,8 @@ const Legal = () => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
-        } else {
-            navigate('/login');
         }
     }, [navigate]);
-
-    if (!user) return null;
 
     return (
         <div className="legal-layout">
@@ -52,7 +48,7 @@ const Legal = () => {
                 <header className="legal-topbar">
                     <h2 className="topbar-title">Legal & Compliance</h2>
                     <div className="topbar-user">
-                        <span>Welcome, <strong>{user.full_name}</strong></span>
+                        <span>Welcome, <strong>{user?.full_name ?? 'Guest'}</strong></span>
                     </div>
                 </header>
 

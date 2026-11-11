@@ -7,21 +7,6 @@ import './Preview.css';
 // Only routed when VITE_PREVIEW_MODE=true; remove once the backend is live.
 export const previewEnabled = import.meta.env.VITE_PREVIEW_MODE === 'true';
 
-// Demo users written to the display-only localStorage cache so member-area pages don't redirect to /login.
-// The backend never sees these; it still decides access from the session.
-const demoUsers = {
-  admin_user: { id: 0, email: 'admin@preview.local', role: 'admin_user', full_name: 'Preview Admin' },
-  members: { id: 0, email: 'member@preview.local', role: 'members', full_name: 'Preview Member' },
-  non_members: { id: 0, email: 'applicant@preview.local', role: 'non_members', full_name: 'Preview Applicant' },
-};
-
-// Called on every render of the app so protected pages opened directly by URL (or after logout) still load.
-export const ensurePreviewUser = () => {
-  if (previewEnabled && !localStorage.getItem('user')) {
-    localStorage.setItem('user', JSON.stringify(demoUsers.members));
-  }
-};
-
 const sections = [
   {
     title: 'Public',
@@ -35,7 +20,11 @@ const sections = [
   {
     title: 'Member area',
     role: 'members',
-    paths: ['/member-dashboard', '/profile', '/cpd', '/library', '/videos', '/logbook', '/legal', '/career', '/forum', '/achievements'],
+    paths: ['/member-dashboard', '/profile', '/cpd', '/library', '/videos', '/logbook', '/forum'],
+  },
+  {
+    title: 'Member area (public)',
+    paths: ['/legal', '/career', '/achievements'],
   },
   {
     title: 'Non-member',
@@ -59,19 +48,13 @@ const endpoints = [
 ];
 
 const Preview = () => {
-  const enterAs = (role) => {
-    if (role) {
-      localStorage.setItem('user', JSON.stringify(demoUsers[role]));
-    }
-  };
-
   return (
     <div className="preview-page">
       <h1>Page Preview</h1>
       <p className="preview-note">
-        Backend-free navigation for checking the UI. A demo member is signed in automatically, so every
-        page opens without logging in; links in a role section switch the demo user to that role first.
-        Data and actions that need the API will be empty or fail.
+        Navigation for checking the UI. While the backend is off, protected pages open without logging in
+        and show a demo user with the page's role. With the backend on, they require a real login.
+        Data and actions that need the API will be empty or fail while it is off.
       </p>
 
       {sections.map((section) => (
@@ -83,7 +66,7 @@ const Preview = () => {
           <ul>
             {section.paths.map((path) => (
               <li key={path}>
-                <Link to={path} onClick={() => enterAs(section.role)}>{path}</Link>
+                <Link to={path}>{path}</Link>
               </li>
             ))}
           </ul>
