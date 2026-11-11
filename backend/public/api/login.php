@@ -4,6 +4,7 @@ applyCors('POST, OPTIONS');
 
 require_once __DIR__ . '/../../config/Auth.php';
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../../config/RateLimit.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -17,6 +18,16 @@ if (!$db) {
 $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->email) && !empty($data->password)) {
+    // Too many recent failures from this IP: refuse before checking the password
+    $retryAfter = loginRetryAfter($db, $data->email);
+    if ($retryAfter > 0) {
+        http_response_code(429);
+        header('Retry-After: ' . $retryAfter);
+        $minutes = (int)ceil($retryAfter / 60);
+        echo json_encode(array("status" => "error", "message" => "Too many failed login attempts. Try again in $minutes minute" . ($minutes === 1 ? '' : 's') . "."));
+        exit();
+    }
+
     $tables = ['admin_user', 'members', 'non_members'];
     $user_found = false;
     $password_hash = '';
@@ -55,6 +66,7 @@ if (!empty($data->email) && !empty($data->password)) {
         if (password_verify($data->password, $password_hash)) {
             // Remember the user on the server; later requests are identified by the session cookie
             loginUser($user_data);
+            clearFailedLogins($db, $data->email);
 
             http_response_code(200);
             echo json_encode(array(
@@ -63,10 +75,12 @@ if (!empty($data->email) && !empty($data->password)) {
                 "user" => $user_data
             ));
         } else {
+            recordFailedLogin($db, $data->email);
             http_response_code(401);
             echo json_encode(array("status" => "error", "message" => "Invalid credentials."));
         }
     } else {
+        recordFailedLogin($db, $data->email);
         http_response_code(404);
         echo json_encode(array("status" => "error", "message" => "User not found."));
     }

@@ -91,8 +91,4 @@ export const uploadedFileUrl = (path) => {
   return `${apiBaseUrl}/${path.replace(/^\/+/, '')}`;
 };
 
-export const uploadedProofUrl = (path) => {
-  if (!backendEnabled || !apiBaseUrl || !path) return '';
-
-  return `${new URL(apiBaseUrl).origin}/${path.replace(/^\/+/, '')}`;
-};
+// Proof-of-payment files are private: load them with backendFetch(`proof.php?id=<application id>`).

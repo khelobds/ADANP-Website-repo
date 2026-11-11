@@ -342,6 +342,13 @@
   border-radius: 4px;
 }
 
+.image-modal-content .proof-pdf {
+  width: min(800px, 85vw);
+  height: 80vh;
+  border: none;
+  border-radius: 4px;
+}
+
 .close-modal-btn {
   position: absolute;
   top: -15px;
