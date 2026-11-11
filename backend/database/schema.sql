@@ -136,3 +136,19 @@ CREATE TABLE IF NOT EXISTS logbook_entries (
     INDEX idx_logbook_member (member_id, procedure_date),
     INDEX idx_logbook_status (status, submitted_at)
 );
+
+-- Member profile details edited on My Profile (see config/Profile.php). One row per member, created on first save.
+-- The name and email stay in members. photo_path is a private file in storage/photos/.
+-- The privacy settings are stored for the member directory, which does not exist yet.
+CREATE TABLE IF NOT EXISTS member_profiles (
+    member_id INT PRIMARY KEY,
+    current_workplace VARCHAR(255) NULL,
+    professional_bio TEXT NULL,
+    photo_path VARCHAR(500) NULL,
+    privacy_visibility TINYINT(1) NOT NULL DEFAULT 1,
+    privacy_show_bio TINYINT(1) NOT NULL DEFAULT 1,
+    privacy_show_workplace TINYINT(1) NOT NULL DEFAULT 1,
+    privacy_show_email TINYINT(1) NOT NULL DEFAULT 0,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE
+);

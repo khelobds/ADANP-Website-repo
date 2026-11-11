@@ -34,7 +34,11 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 - [ ] **Forum:** threads, replies and moderation (`Forum.jsx`).
 - [ ] **Clinical library:** resource list and file downloads (`Library.jsx`).
 - [ ] **Procedure videos:** video list stored in the database, plus embed or playback (`Videos.jsx`).
-- [ ] **Profile:** save edits to the database and support member photo uploads. The PRC license number and expiry date are saved (`license.php`, for CPD tracking); the other fields are still only written to browser storage (`Profile.jsx:58`).
+- [x] **Profile:** save edits to the database and support member photo uploads. Done 2026-11-11: My Profile loads and saves the workplace, bio and privacy settings with `profile.php` (table `member_profiles`) and the PRC license with `license.php`. The name and email are read-only (members cannot change them). Photos (JPG/PNG, max 2 MB) go live on upload and are private to the member and admins (`profile_photo.php`, `backend/storage/photos/`). The card shows a real membership ID (`ADANP-<year joined>-<member number>`) and "Member since" instead of a fixed valid-thru date. `login.php` now returns `full_name`, so dashboards greet members by name.
+  - [ ] Run `php backend/bin/migrate.php` on every database to create the `member_profiles` table.
+  - [ ] The privacy settings are saved but do nothing until a member directory exists.
+  - [ ] Make the card's Print Card and Download PDF buttons work, and decide whether membership expires (for a valid-thru date).
+  - [ ] Click through in a browser: edit and save the profile, upload, replace and remove a photo.
 - [ ] **Admin tools** to manage the content above (library and video uploads, forum moderation). CPD approvals, seminar credits and logbook verification are done (admin dashboard, CPD and Logbook tabs); editing an approved CPD record is not possible yet.
 
 ## 3. Other incomplete features
@@ -49,7 +53,7 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 ## 4. Backend integration & deployment
 
 - [ ] **Enable the backend in production.** Set `VITE_BACKEND_ENABLED=true` and `VITE_API_BASE_URL`; the "integration is under development" message shows until then.
-- [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2. CPD tracking's and the logbook's tables are done; still needed for the forum, library, videos and profile.
+- [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2. CPD tracking's, the logbook's and the profile's tables are done; still needed for the forum, library and videos.
 - [ ] **Choose hosting** for the frontend and the PHP/MySQL backend, set the environment variables (`DB_*`, `CORS_ALLOWED_ORIGINS`, `SESSION_*`; see `backend/.env.example`), and set the document root to `backend/public`.
 - [ ] **Add backend tests** (only connection diagnostics exist) and a PHP lint/test step to CI.
 
