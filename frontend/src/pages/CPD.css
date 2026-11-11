@@ -295,8 +295,124 @@
   background: #1a252f;
 }
 
+/* Tracker states and notices */
+.cpd-state {
+  font-weight: 700;
+}
+
+.cpd-state.progress { color: #c99339; }
+.cpd-state.ok { color: #23863b; }
+.cpd-state.bad { color: #c53030; }
+
+.cpd-notice {
+  background: #fdf8ee;
+  border: 1px solid #f0dcb3;
+  border-radius: 10px;
+  padding: 15px 18px;
+  color: #6b5524;
+  line-height: 1.5;
+}
+
+.cpd-notice a,
+.tracker-legend a {
+  color: #c99339;
+  font-weight: 600;
+}
+
+.cpd-message {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin: 15px 0 0;
+}
+
+.cpd-message.success { background: #e6f6ea; color: #23863b; }
+.cpd-message.error { background: #fdeaea; color: #c53030; }
+
+/* Record cards */
+.cert-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cpd-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cpd-badge.pending { background: #fdf3e1; color: #9a6a12; }
+.cpd-badge.approved { background: #e6f6ea; color: #23863b; }
+.cpd-badge.rejected { background: #fdeaea; color: #c53030; }
+
+.cpd-outside {
+  font-size: 0.75rem;
+  color: #a0aec0;
+}
+
+.cert-delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #c53030;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cert-note {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: #c53030;
+}
+
+/* Submission form */
+.cpd-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.cpd-form label:not(.upload-area) {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.cpd-form input[type="text"],
+.cpd-form input[type="date"],
+.cpd-form input[type="number"] {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.cpd-form .upload-area {
+  display: block;
+}
+
+.btn-upload:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 @media (max-width: 768px) {
   .cpd-content-container {
     padding: 15px;
+  }
+
+  .cpd-form-grid {
+    grid-template-columns: 1fr;
   }
 }

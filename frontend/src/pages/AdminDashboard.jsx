@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GalleryAdmin from './GalleryAdmin';
+import AdminCpd from './AdminCpd';
+import FileViewerModal, { loadPrivateFile } from '../components/FileViewerModal';
 import logo from '../assets/adanp-logo.jpg';
 import './AdminDashboard.css';
 import { backendErrorMessage, backendFetch, logout } from '../config/api';
@@ -9,7 +11,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [applications, setApplications] = useState([]);
-  // { url, type } of the proof being viewed; url is a blob: URL of the file loaded from proof.php
+  // { url, type } of the proof being viewed, loaded from proof.php
   const [selectedProof, setSelectedProof] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -35,25 +37,13 @@ const AdminDashboard = () => {
     }
   };
 
-  // Proofs are private, so they are loaded with the session cookie instead of linked directly
   const viewProof = async (appId) => {
     try {
-      const response = await backendFetch(`proof.php?id=${appId}`);
-      if (!response.ok) {
-        alert('Could not load the proof of payment.');
-        return;
-      }
-      const blob = await response.blob();
-      setSelectedProof({ url: URL.createObjectURL(blob), type: blob.type });
+      setSelectedProof(await loadPrivateFile(`proof.php?id=${appId}`));
     } catch (error) {
       console.error('Error loading proof of payment:', error);
       alert(backendErrorMessage(error, 'Could not load the proof of payment.'));
     }
-  };
-
-  const closeProof = () => {
-    URL.revokeObjectURL(selectedProof.url);
-    setSelectedProof(null);
   };
 
   const handleLogout = async () => {
@@ -165,6 +155,10 @@ const AdminDashboard = () => {
       );
     }
 
+    if (activeTab === 'cpd') {
+      return <AdminCpd />;
+    }
+
     if (activeTab === 'gallery') {
       return (
         <div className="embedded-gallery">
@@ -199,7 +193,13 @@ const AdminDashboard = () => {
           >
             Applicants
           </button>
-          <button 
+          <button
+            className={`sidebar-btn ${activeTab === 'cpd' ? 'active' : ''}`}
+            onClick={() => setActiveTab('cpd')}
+          >
+            CPD
+          </button>
+          <button
             className={`sidebar-btn ${activeTab === 'gallery' ? 'active' : ''}`}
             onClick={() => setActiveTab('gallery')}
           >
@@ -218,6 +218,7 @@ const AdminDashboard = () => {
           <h1 className="topbar-title">
             {activeTab === 'dashboard' && 'Dashboard Overview'}
             {activeTab === 'applicants' && 'Applicant Management'}
+            {activeTab === 'cpd' && 'CPD Management'}
             {activeTab === 'gallery' && 'Gallery Management'}
           </h1>
           <div className="topbar-user">
@@ -236,17 +237,7 @@ const AdminDashboard = () => {
         </div>
       </main>
 
-      {/* Image Modal for Proof of Payment */}
-      {selectedProof && (
-        <div className="image-modal-overlay" onClick={closeProof}>
-          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal-btn" onClick={closeProof}>×</button>
-            {selectedProof.type === 'application/pdf'
-              ? <iframe src={selectedProof.url} title="Proof of Payment" className="proof-pdf" />
-              : <img src={selectedProof.url} alt="Proof of Payment" />}
-          </div>
-        </div>
-      )}
+      <FileViewerModal file={selectedProof} title="Proof of Payment" onClose={() => setSelectedProof(null)} />
     </div>
   );
 };

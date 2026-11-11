@@ -11,7 +11,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 require_once __DIR__ . '/../config/Database.php';
-require_once __DIR__ . '/../config/Proofs.php';
+require_once __DIR__ . '/../config/PrivateFiles.php';
 
 $apply = in_array('--apply', $argv, true);
 
@@ -25,13 +25,13 @@ $rows = $db->query("SELECT id, proof_of_payment_path FROM non_member_application
     ->fetchAll(PDO::FETCH_ASSOC);
 $update = $db->prepare("UPDATE non_member_applications SET proof_of_payment_path = :path WHERE id = :id");
 
-if ($apply && !is_dir(proofStorageDir())) {
-    mkdir(proofStorageDir(), 0755, true);
+if ($apply && !is_dir(privateStorageDir('proofs'))) {
+    mkdir(privateStorageDir('proofs'), 0755, true);
 }
 
 $pending = 0;
 foreach ($rows as $row) {
-    $from = proofFilePath($row['proof_of_payment_path']);
+    $from = privateFilePath($row['proof_of_payment_path']);
     if (!$from || !is_file($from)) {
         echo "Skipped: application #{$row['id']} ({$row['proof_of_payment_path']}): file missing or unexpected name\n";
         continue;
@@ -44,7 +44,7 @@ foreach ($rows as $row) {
         continue;
     }
 
-    if (!rename($from, proofStorageDir() . $name)) {
+    if (!rename($from, privateStorageDir('proofs') . $name)) {
         fwrite(STDERR, "Failed to move uploads/$name\n");
         exit(1);
     }

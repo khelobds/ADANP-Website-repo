@@ -41,7 +41,7 @@ try {
 
     if ($action === 'Approve') {
         // Fetch the user's details from non_members to insert into members
-        $fetchQuery = "SELECT nma.non_member_id, nm.full_name, nm.age, nm.gender, nm.email, nm.password 
+        $fetchQuery = "SELECT nma.non_member_id, nma.license_number, nm.full_name, nm.age, nm.gender, nm.email, nm.password 
                        FROM non_member_applications nma
                        JOIN non_members nm ON nma.non_member_id = nm.id
                        WHERE nma.id = :id LIMIT 1";
@@ -69,6 +69,10 @@ try {
                 $insertStmt->bindParam(':email', $row['email']);
                 $insertStmt->bindParam(':password', $row['password']);
                 $insertStmt->execute();
+
+                // Carry the PRC license number over; the member adds the expiry date in their Profile
+                $licenseStmt = $db->prepare("INSERT IGNORE INTO member_licenses (member_id, license_number) VALUES (:id, :number)");
+                $licenseStmt->execute(array(':id' => $db->lastInsertId(), ':number' => $row['license_number']));
                 
                 // Optionally delete them from non_members
                 // For now, let's keep them in non_members so they don't lose the application history

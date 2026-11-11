@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../config/Auth.php';
 $user = requireLogin(array('non_members'));
 
 require_once __DIR__ . '/../../config/Database.php';
-require_once __DIR__ . '/../../config/Proofs.php';
+require_once __DIR__ . '/../../config/PrivateFiles.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -43,45 +43,14 @@ try {
         exit();
     }
 
-    $proof_of_payment_path = "";
-
-    // Handle file upload
-    if (isset($_FILES['proof_of_payment']) && $_FILES['proof_of_payment']['error'] === UPLOAD_ERR_OK) {
-        // Outside the web root: admins view proofs through api/proof.php only
-        $uploadDir = proofStorageDir();
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        $fileTmpPath = $_FILES['proof_of_payment']['tmp_name'];
-
-        // Detect the type from the file contents and pick the extension from it,
-        // ignoring the uploaded name and the browser-supplied type
-        $allowedTypes = PROOF_TYPES;
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $fileType = $finfo->file($fileTmpPath);
-
-        if (isset($allowedTypes[$fileType])) {
-            $newFileName = bin2hex(random_bytes(16)) . '.' . $allowedTypes[$fileType];
-            $destPath = $uploadDir . $newFileName;
-
-            if (move_uploaded_file($fileTmpPath, $destPath)) {
-                $proof_of_payment_path = 'proofs/' . $newFileName;
-            } else {
-                http_response_code(500);
-                echo json_encode(array("status" => "error", "message" => "Error moving the uploaded file."));
-                exit();
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Upload failed. Allowed file types: jpg, jpeg, png, gif, pdf."));
-            exit();
-        }
-    } else {
-        http_response_code(400);
-        echo json_encode(array("status" => "error", "message" => "No valid payment proof file uploaded."));
+    // Saved outside the web root: admins view proofs through api/proof.php only
+    $upload = savePrivateUpload($_FILES['proof_of_payment'] ?? null, 'proofs');
+    if (isset($upload['error'])) {
+        http_response_code($upload['status']);
+        echo json_encode(array("status" => "error", "message" => $upload['error']));
         exit();
     }
+    $proof_of_payment_path = $upload['path'];
 
     $query = "INSERT INTO non_member_applications (non_member_id, full_name, age, license_number, address, proof_of_payment_path, status) 
               VALUES (:user_id, :name, :age, :license, :address, :proof_path, 'Pending')";

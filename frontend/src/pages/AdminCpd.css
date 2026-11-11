@@ -1,0 +1,151 @@
+.admin-cpd {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.cpd-status-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.cpd-status-tab {
+  border: 1px solid #e0e0e0;
+  background: #f8fafc;
+  color: #333;
+  padding: 6px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cpd-status-tab.active {
+  background: #c99339;
+  border-color: #c99339;
+  color: #fff;
+}
+
+.cpd-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: #718096;
+  margin-top: 2px;
+}
+
+.cpd-sub-inline {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+.cpd-empty {
+  text-align: center;
+  color: #718096;
+}
+
+.cpd-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cpd-badge.pending { background: #fdf3e1; color: #9a6a12; }
+.cpd-badge.approved { background: #e6f6ea; color: #23863b; }
+.cpd-badge.rejected { background: #fdeaea; color: #c53030; }
+
+.cpd-help {
+  margin-top: -10px;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.cpd-form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.cpd-seminar-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.cpd-seminar-form input[type="text"],
+.cpd-seminar-form input[type="date"],
+.cpd-seminar-form input[type="number"],
+.cpd-seminar-form input[type="search"] {
+  padding: 8px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.cpd-attendees {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
+}
+
+.cpd-attendees-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cpd-attendees-header input {
+  flex: 1;
+  min-width: 160px;
+}
+
+.cpd-link-btn {
+  background: none;
+  border: none;
+  color: #c99339;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px;
+}
+
+.cpd-attendee-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.cpd-attendee-list li label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+
+.cpd-admin-message {
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.cpd-admin-message.success { background: #e6f6ea; color: #23863b; }
+.cpd-admin-message.error { background: #fdeaea; color: #c53030; }
+
+.cpd-submit {
+  padding: 10px 18px;
+}
+
+@media (max-width: 768px) {
+  .cpd-form-row {
+    grid-template-columns: 1fr;
+  }
+}
