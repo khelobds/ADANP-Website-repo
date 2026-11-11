@@ -119,51 +119,53 @@
   margin-bottom: 25px;
 }
 
-.chart-bars {
-  display: flex;
-  align-items: flex-end;
-  height: 150px;
-  gap: 15px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #edf2f7;
+.chart-subtitle {
+  font-size: 0.8rem;
+  color: #718096;
 }
 
-.bar-wrapper {
-  flex: 1;
+.procedure-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 10px;
 }
 
-.bar-fill {
-  width: 100%;
-  max-width: 40px;
-  background: linear-gradient(to top, #c99339, #e2b059);
-  border-radius: 4px 4px 0 0;
-  transition: height 1s ease;
-  position: relative;
+.procedure-bars li {
+  display: grid;
+  grid-template-columns: 200px 1fr 40px;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #4a5568;
 }
 
-.bar-fill:hover {
-  filter: brightness(1.1);
+.procedure-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.bar-fill::before {
-  content: attr(data-value);
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
+.procedure-track {
+  height: 12px;
+  background: #edf2f7;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.procedure-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(to right, #c99339, #e2b059);
+  border-radius: 6px;
+}
+
+.procedure-count {
   font-weight: 700;
   color: #c99339;
-}
-
-.bar-label {
-  font-size: 0.75rem;
-  color: #718096;
-  white-space: nowrap;
+  text-align: right;
 }
 
 /* Table Section */
@@ -241,19 +243,107 @@
   gap: 8px;
 }
 
-.btn-verify {
-  background: transparent;
-  color: #c99339;
-  border: 1px solid #c99339;
-  padding: 5px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+.status-badge.rejected {
+  background: #fdeaea;
+  color: #c53030;
+  border: 1px solid #fed7d7;
 }
 
-.btn-verify:hover {
-  background: #c99339;
-  color: white;
+.btn-add-entry:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-delete-entry {
+  background: none;
+  border: none;
+  color: #c53030;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.signed-off {
+  color: #319795;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logbook-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: #718096;
+  margin-top: 4px;
+}
+
+.logbook-sub.rejected-note {
+  color: #c53030;
+}
+
+.logbook-empty {
+  color: #a0aec0;
+  text-align: center;
+  margin: 0;
+}
+
+.logbook-message {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin: 0 0 15px;
+}
+
+.logbook-message.success { background: #e6f6ea; color: #23863b; }
+.logbook-message.error { background: #fdeaea; color: #c53030; }
+
+/* New entry form */
+.logbook-form {
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: #f8fafc;
+}
+
+.logbook-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.logbook-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.logbook-form input,
+.logbook-form select {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: white;
+}
+
+.logbook-help {
+  font-size: 0.8rem;
+  color: #718096;
+  margin: 15px 0;
+}
+
+@media (max-width: 900px) {
+  .logbook-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .procedure-bars li {
+    grid-template-columns: 120px 1fr 30px;
+  }
 }

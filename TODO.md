@@ -27,12 +27,15 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
   - [ ] Confirm with ADANP that 45 units per 3-year cycle matches the current PRC requirement (`CPD_REQUIRED_UNITS` in `backend/config/Cpd.php`).
   - [ ] Click through in a browser: submit a certificate, approve/reject it as admin, credit a seminar.
 - [x] **Certifications:** store and list each member's certificates. Covered by CPD tracking: the Certificate Vault on the CPD page lists the member's records and certificates. (`Certification.jsx` is the public certification exam page, not member certificates.)
-- [ ] **Electronic logbook:** create, list and verify procedure logs (`Logbook.jsx`).
+- [x] **Electronic logbook:** create, list and verify procedure logs. Done 2026-11-11: members add entries on the Logbook page (date, procedure from a fixed list, optional area and duration, outcome from a fixed list, and a patient code they make up, with no names or notes). Entries start Pending; an admin verifies or rejects them (with a reason) in the admin dashboard's Logbook tab. Members can delete Pending or Rejected entries; Verified entries are locked. It is a plain record and does not count toward CPD. Table `logbook_entries`; the procedure and outcome lists are in `backend/config/Logbook.php`.
+  - [ ] Run `php backend/bin/migrate.php` on every database to create the `logbook_entries` table.
+  - [ ] Confirm the procedure and outcome lists with ADANP (`LOGBOOK_PROCEDURES`, `LOGBOOK_OUTCOMES` in `backend/config/Logbook.php`).
+  - [ ] Click through in a browser: add, delete, verify and reject entries.
 - [ ] **Forum:** threads, replies and moderation (`Forum.jsx`).
 - [ ] **Clinical library:** resource list and file downloads (`Library.jsx`).
 - [ ] **Procedure videos:** video list stored in the database, plus embed or playback (`Videos.jsx`).
 - [ ] **Profile:** save edits to the database and support member photo uploads. The PRC license number and expiry date are saved (`license.php`, for CPD tracking); the other fields are still only written to browser storage (`Profile.jsx:58`).
-- [ ] **Admin tools** to manage the content above (library and video uploads, forum moderation, logbook verification). CPD approvals and seminar credits are done (admin dashboard, CPD tab); editing an approved CPD record is not possible yet.
+- [ ] **Admin tools** to manage the content above (library and video uploads, forum moderation). CPD approvals, seminar credits and logbook verification are done (admin dashboard, CPD and Logbook tabs); editing an approved CPD record is not possible yet.
 
 ## 3. Other incomplete features
 
@@ -46,7 +49,7 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 ## 4. Backend integration & deployment
 
 - [ ] **Enable the backend in production.** Set `VITE_BACKEND_ENABLED=true` and `VITE_API_BASE_URL`; the "integration is under development" message shows until then.
-- [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2. CPD tracking's tables are done; still needed for the logbook, forum, library, videos and profile.
+- [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2. CPD tracking's and the logbook's tables are done; still needed for the forum, library, videos and profile.
 - [ ] **Choose hosting** for the frontend and the PHP/MySQL backend, set the environment variables (`DB_*`, `CORS_ALLOWED_ORIGINS`, `SESSION_*`; see `backend/.env.example`), and set the document root to `backend/public`.
 - [ ] **Add backend tests** (only connection diagnostics exist) and a PHP lint/test step to CI.
 

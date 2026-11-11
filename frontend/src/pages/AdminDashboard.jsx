@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GalleryAdmin from './GalleryAdmin';
 import AdminCpd from './AdminCpd';
+import AdminLogbook from './AdminLogbook';
 import FileViewerModal, { loadPrivateFile } from '../components/FileViewerModal';
 import logo from '../assets/adanp-logo.jpg';
 import './AdminDashboard.css';
@@ -159,6 +160,10 @@ const AdminDashboard = () => {
       return <AdminCpd />;
     }
 
+    if (activeTab === 'logbook') {
+      return <AdminLogbook />;
+    }
+
     if (activeTab === 'gallery') {
       return (
         <div className="embedded-gallery">
@@ -200,6 +205,12 @@ const AdminDashboard = () => {
             CPD
           </button>
           <button
+            className={`sidebar-btn ${activeTab === 'logbook' ? 'active' : ''}`}
+            onClick={() => setActiveTab('logbook')}
+          >
+            Logbook
+          </button>
+          <button
             className={`sidebar-btn ${activeTab === 'gallery' ? 'active' : ''}`}
             onClick={() => setActiveTab('gallery')}
           >
@@ -219,6 +230,7 @@ const AdminDashboard = () => {
             {activeTab === 'dashboard' && 'Dashboard Overview'}
             {activeTab === 'applicants' && 'Applicant Management'}
             {activeTab === 'cpd' && 'CPD Management'}
+            {activeTab === 'logbook' && 'Logbook Verification'}
             {activeTab === 'gallery' && 'Gallery Management'}
           </h1>
           <div className="topbar-user">

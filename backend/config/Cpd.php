@@ -7,29 +7,14 @@ const CPD_REQUIRED_UNITS = 45;
 const CPD_CYCLE_YEARS = 3;
 const CPD_MAX_UNITS_PER_RECORD = 50;
 
-function jsonError($status, $message) {
-    http_response_code($status);
-    echo json_encode(array("status" => "error", "message" => $message));
-    exit();
-}
-
-// 'YYYY-MM-DD' that is a real calendar date, or null
-function validDate($value) {
-    $date = DateTime::createFromFormat('!Y-m-d', (string)$value);
-    return ($date && $date->format('Y-m-d') === $value) ? $value : null;
-}
+// jsonError(), validDate() and requiredText() used by the CPD endpoints
+require_once __DIR__ . '/Validation.php';
 
 // Positive number of units with at most 2 decimals, up to CPD_MAX_UNITS_PER_RECORD, or null
 function validUnits($value) {
     if (!is_numeric($value) || !preg_match('/^\d+(\.\d{1,2})?$/', trim((string)$value))) return null;
     $units = (float)$value;
     return ($units > 0 && $units <= CPD_MAX_UNITS_PER_RECORD) ? $units : null;
-}
-
-// Required text field trimmed to $max characters, or null if empty
-function requiredText($value, $max = 255) {
-    $text = trim((string)$value);
-    return $text === '' ? null : mb_substr($text, 0, $max);
 }
 
 // array('start' => 'Y-m-d', 'end' => 'Y-m-d') for a license expiry date, or null without one
