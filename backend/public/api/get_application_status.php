@@ -35,7 +35,7 @@ try {
         // Once approved, the user has a row in members (created by update_application.php).
         // Switch the session over to that account so member-only endpoints accept them.
         if ($row['status'] === 'Approved') {
-            $memberStmt = $db->prepare("SELECT id, email FROM members WHERE email = :email LIMIT 1");
+            $memberStmt = $db->prepare("SELECT id, email, full_name FROM members WHERE email = :email LIMIT 1");
             $memberStmt->bindParam(':email', $user['email']);
             $memberStmt->execute();
             $member = $memberStmt->fetch(PDO::FETCH_ASSOC);
@@ -43,7 +43,7 @@ try {
             if ($member) {
                 $memberUser = array("id" => $member['id'], "email" => $member['email'], "role" => "members");
                 loginUser($memberUser);
-                $response["user"] = $memberUser;
+                $response["user"] = $memberUser + array("full_name" => $member['full_name']);
             }
         }
 

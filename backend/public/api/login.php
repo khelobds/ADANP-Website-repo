@@ -32,9 +32,12 @@ if (!empty($data->email) && !empty($data->password)) {
     $user_found = false;
     $password_hash = '';
     $user_data = [];
+    $full_name = null;
 
     foreach ($tables as $table) {
-        $query = "SELECT id, email, password FROM $table WHERE email = :email LIMIT 1";
+        // admin_user has no full_name column
+        $columns = $table === 'admin_user' ? 'id, email, password' : 'id, email, password, full_name';
+        $query = "SELECT $columns FROM $table WHERE email = :email LIMIT 1";
 
         try {
             $stmt = $db->prepare($query);
@@ -53,6 +56,7 @@ if (!empty($data->email) && !empty($data->password)) {
                     "email" => $row['email'],
                     "role" => $table
                 );
+                $full_name = $row['full_name'] ?? null;
                 break; // Stop searching once user is found
             }
         } catch (\Throwable $e) {
@@ -72,7 +76,8 @@ if (!empty($data->email) && !empty($data->password)) {
             echo json_encode(array(
                 "status" => "success",
                 "message" => "Login successful.",
-                "user" => $user_data
+                // The name is only for display, so it is returned but not kept in the session
+                "user" => $full_name === null ? $user_data : $user_data + array("full_name" => $full_name)
             ));
         } else {
             recordFailedLogin($db, $data->email);

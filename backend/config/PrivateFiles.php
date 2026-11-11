@@ -1,5 +1,5 @@
 <?php
-// Private uploads (proof-of-payment files, CPD certificates) are stored outside the web root in
+// Private uploads (proof-of-payment files, CPD certificates, member photos) are stored outside the web root in
 // backend/storage/<folder>/ and only served through endpoints that check who is asking.
 // Stored paths look like '<folder>/<32 hex chars>.<ext>'.
 
@@ -10,15 +10,16 @@ const PRIVATE_FILE_TYPES = array(
     'application/pdf' => 'pdf',
 );
 
-const PRIVATE_FOLDERS = array('proofs', 'cpd');
+const PRIVATE_FOLDERS = array('proofs', 'cpd', 'photos');
 
 function privateStorageDir($folder) {
     return __DIR__ . '/../storage/' . $folder . '/';
 }
 
-// Saves an entry of $_FILES into storage/<folder>/.
+// Saves an entry of $_FILES into storage/<folder>/. $allowedTypes (mime => extension, a subset of
+// PRIVATE_FILE_TYPES) narrows the accepted types; by default all PRIVATE_FILE_TYPES are accepted.
 // Returns array('path' => '<folder>/<name>') or array('error' => message, 'status' => HTTP code).
-function savePrivateUpload($file, $folder, $maxBytes = 5242880) {
+function savePrivateUpload($file, $folder, $maxBytes = 5242880, $allowedTypes = PRIVATE_FILE_TYPES) {
     if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
         $tooBig = isset($file) && in_array($file['error'], array(UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE), true);
         return array('error' => $tooBig ? 'The file is too large.' : 'No valid file uploaded.', 'status' => 400);
@@ -30,8 +31,8 @@ function savePrivateUpload($file, $folder, $maxBytes = 5242880) {
     // Detect the type from the file contents and pick the extension from it,
     // ignoring the uploaded name and the browser-supplied type
     $type = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
-    if (!isset(PRIVATE_FILE_TYPES[$type])) {
-        return array('error' => 'Upload failed. Allowed file types: jpg, jpeg, png, gif, pdf.', 'status' => 400);
+    if (!isset($allowedTypes[$type])) {
+        return array('error' => 'Upload failed. Allowed file types: ' . implode(', ', array_unique(array_values($allowedTypes))) . '.', 'status' => 400);
     }
 
     $dir = privateStorageDir($folder);
@@ -39,7 +40,7 @@ function savePrivateUpload($file, $folder, $maxBytes = 5242880) {
         mkdir($dir, 0755, true);
     }
 
-    $name = bin2hex(random_bytes(16)) . '.' . PRIVATE_FILE_TYPES[$type];
+    $name = bin2hex(random_bytes(16)) . '.' . $allowedTypes[$type];
     if (!move_uploaded_file($file['tmp_name'], $dir . $name)) {
         return array('error' => 'Error moving the uploaded file.', 'status' => 500);
     }
@@ -49,7 +50,7 @@ function savePrivateUpload($file, $folder, $maxBytes = 5242880) {
 // Maps a stored path to a file on disk, or null if it is not a valid private file path.
 // 'uploads/<name>' is the old public proof folder (bin/move_proofs.php empties it).
 function privateFilePath($storedPath) {
-    if (!preg_match('#^(proofs|cpd|uploads)/([a-f0-9]{32}\.(?:jpg|png|gif|pdf))$#', (string)$storedPath, $m)) {
+    if (!preg_match('#^(proofs|cpd|photos|uploads)/([a-f0-9]{32}\.(?:jpg|png|gif|pdf))$#', (string)$storedPath, $m)) {
         return null;
     }
     return $m[1] === 'uploads'

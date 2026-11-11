@@ -12,3 +12,5 @@
 !/storage/proofs/.gitkeep
 /storage/cpd/*
 !/storage/cpd/.gitkeep
+/storage/photos/*
+!/storage/photos/.gitkeep
