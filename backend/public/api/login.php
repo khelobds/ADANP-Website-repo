@@ -51,7 +51,8 @@ if (!empty($data->email) && !empty($data->password)) {
     }
 
     if ($user_found) {
-        if ($data->password === $password_hash || password_verify($data->password, $password_hash)) {
+        // Only hashed passwords are accepted; plain-text rows must be converted with bin/rehash_passwords.php
+        if (password_verify($data->password, $password_hash)) {
             // Remember the user on the server; later requests are identified by the session cookie
             loginUser($user_data);
 

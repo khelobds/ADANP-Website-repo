@@ -27,6 +27,7 @@ Backend (run from repo root):
 ```bash
 php -S localhost:8000 -t backend/public    # API served at http://localhost:8000/api
 php backend/bin/migrate.php                # applies backend/database/schema.sql (CLI-only)
+php backend/bin/rehash_passwords.php       # lists plain-text passwords; add --apply to hash them (login only accepts hashes)
 php backend/tests/connection_cli.php       # DB connectivity diagnostic (tests/ are diagnostics, not a test suite)
 ```
 
