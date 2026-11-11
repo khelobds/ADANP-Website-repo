@@ -1,6 +1,6 @@
 # ADANP Web Platform — TODO
 
-Unfinished features and tasks, grouped by priority. Last reviewed: 2026-11-06.
+Unfinished features and tasks, grouped by priority. Last reviewed: 2026-11-11.
 
 ## 1. Security (fix before going live)
 
@@ -31,7 +31,7 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 - [ ] **Forum:** threads, replies and moderation (`Forum.jsx`).
 - [ ] **Clinical library:** resource list and file downloads (`Library.jsx`).
 - [ ] **Procedure videos:** video list stored in the database, plus embed or playback (`Videos.jsx`).
-- [ ] **Profile:** save edits to the database (they are only written to browser storage at `Profile.jsx:58`) and support member photo uploads.
+- [ ] **Profile:** save edits to the database and support member photo uploads. The PRC license number and expiry date are saved (`license.php`, for CPD tracking); the other fields are still only written to browser storage (`Profile.jsx:58`).
 - [ ] **Admin tools** to manage the content above (library and video uploads, forum moderation, logbook verification). CPD approvals and seminar credits are done (admin dashboard, CPD tab); editing an approved CPD record is not possible yet.
 
 ## 3. Other incomplete features
@@ -46,7 +46,7 @@ Each item needs a database table, a PHP endpoint and the matching frontend page 
 ## 4. Backend integration & deployment
 
 - [ ] **Enable the backend in production.** Set `VITE_BACKEND_ENABLED=true` and `VITE_API_BASE_URL`; the "integration is under development" message shows until then.
-- [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2.
+- [ ] **Extend `backend/database/schema.sql` and `bin/migrate.php`** for the new tables in section 2. CPD tracking's tables are done; still needed for the logbook, forum, library, videos and profile.
 - [ ] **Choose hosting** for the frontend and the PHP/MySQL backend, set the environment variables (`DB_*`, `CORS_ALLOWED_ORIGINS`, `SESSION_*`; see `backend/.env.example`), and set the document root to `backend/public`.
 - [ ] **Add backend tests** (only connection diagnostics exist) and a PHP lint/test step to CI.
 
