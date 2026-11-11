@@ -52,7 +52,8 @@
 }
 
 .cpd-badge.pending { background: #fdf3e1; color: #9a6a12; }
-.cpd-badge.approved { background: #e6f6ea; color: #23863b; }
+.cpd-badge.approved,
+.cpd-badge.verified { background: #e6f6ea; color: #23863b; }
 .cpd-badge.rejected { background: #fdeaea; color: #c53030; }
 
 .cpd-help {

@@ -114,3 +114,25 @@ CREATE TABLE IF NOT EXISTS cpd_records (
     UNIQUE KEY uniq_cpd_event_member (event_id, member_id),
     INDEX idx_cpd_member_status (member_id, status, activity_date)
 );
+
+-- Electronic logbook: procedures a member performed, verified by an admin (see config/Logbook.php).
+-- patient_code is a code the member makes up, never a patient name. There is no notes column on purpose.
+CREATE TABLE IF NOT EXISTS logbook_entries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT NOT NULL,
+    procedure_date DATE NOT NULL,
+    procedure_type VARCHAR(100) NOT NULL,
+    treatment_area VARCHAR(100) NULL,
+    patient_code VARCHAR(20) NOT NULL,
+    duration_minutes SMALLINT UNSIGNED NULL,
+    outcome VARCHAR(50) NOT NULL,
+    status ENUM('Pending', 'Verified', 'Rejected') NOT NULL DEFAULT 'Pending',
+    review_note TEXT NULL,
+    reviewed_by INT NULL,
+    reviewed_at TIMESTAMP NULL,
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewed_by) REFERENCES admin_user(id) ON DELETE SET NULL,
+    INDEX idx_logbook_member (member_id, procedure_date),
+    INDEX idx_logbook_status (status, submitted_at)
+);
